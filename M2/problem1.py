@@ -8,6 +8,11 @@ def process_array(num, arr):
     print("\nProcessing Array({}): \n\n".format(num))
     print(arr)
     print("\nOdds output:\n")
+    tmp = []
+    for i in arr:
+        if i%2 != 0:
+            tmp.append(i)
+    print(tmp)
     # TODO add necessary print statement to output only the odd values (hint, best if shown as a single line)
 
 

@@ -8,8 +8,10 @@ def process_array(num, arr):
     print("\nProcessing Array({}): \n\n".format(num))
     print(arr)
     total = 0.00
+    for i in arr:
+        total+=i
     # TODO add necessary code here for sum; every number must have two decimal places shown
-    print("\nThe total is {}:\n".format(total))
+    print(f"\nThe total is: {total:.2f}\n")
 
 
 print("Problem 2")
@@ -17,3 +19,4 @@ process_array(1, a1)
 process_array(2, a2)
 process_array(3, a3)
 process_array(4, a4)
+

@@ -8,6 +8,16 @@ def process_array(num, arr):
     print("\nProcessing Array({}): \n\n".format(num))
     print(arr)
     print("\nPositive Output:\n")
+    tmp = []
+    for i in arr:
+        if float(i)>0:
+            tmp.append(i)
+        else:
+            if type(i) in [int, float]:
+                tmp.append(i * -1) 
+            else:
+                tmp.append(type(i)(int(i) * -1))
+    print(tmp)
     # TODO add new code here to print the desired result
 
 
