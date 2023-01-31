@@ -1,0 +1,38 @@
+<table><tr><td> <em>Assignment: </em> IS601-M1-GettingStarted</td></tr>
+<tr><td> <em>Student: </em> Gagan Indukala Krishna Murthy (gi36)</td></tr>
+<tr><td> <em>Generated: </em> 1/31/2023 1:57:39 AM</td></tr>
+<tr><td> <em>Grading Link: </em> <a rel="noreferrer noopener" href="https://learn.ethereallab.app/homework/IS601-006-S23/is601-m1-gettingstarted/grade/gi36" target="_blank">Grading</a></td></tr></table>
+<table><tr><td> <em>Instructions: </em> <ol><li>Create a repository on github, use the format [course]-[section] as the repository name.</li><li>Make sure it's set to private</li><li>Go to Settings -&gt; Manage Access -&gt; Invite Collaborator -&gt; Search for my ID&nbsp;<strong>MattToegel</strong>&nbsp;and send an invite; if your section has a grader do the same for their github id<ol><li>Note: Once in a while the invite doesn't get created correctly and you'll need to resend it, keep an eye on the acceptance of the invite since this is required for further HW validations. A comment will be left on Canvas for the submission if the invite is missing at the time of grading).</li></ol></li><li>From the terminal / command line create a new branch called W1-GettingStarted</li><li>Create a README.md file and add it to the branch</li><li>Fill in some basic details:<ol><li>Course/Section</li><li>Your name (first is fine)</li><li>Brief info about yourself you'd like to share</li></ol></li><li>Hint after creating the file<ol><li><code>git add README.md</code></li><li><code>git commit -m "my readme file"</code></li><li><code>git push origin W1-GettingStarted</code></li><li>Create a pull request from this branch (via github.com)</li><li>Don't merge/close the pull request yet</li></ol></li><li>create a new file called W1_Submission.md (the content of this output will be inserted there)<ol><li>Once done, add, commit, push the submission md file, then you may merge the Pull Request</li></ol></li><li>Submit the direct link to this file from the master/main branch</li></ol><p>Fill in the below deliverables.</p></td></tr></table>
+<table><tr><td> <em>Deliverable 1: </em> IDE Setup Evidence </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
+<tr><td><table><tr><td> <em>Sub-Task 1: </em> Screenshot showing requested extensions installed</td></tr>
+<tr><td><table><tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/215683634-95c702de-29c5-46cd-94b9-a09fcb3c63c1.JPG"/></td></tr>
+<tr><td> <em>Caption:</em> <p>#1 Wakatime Dashboard<br></p>
+</td></tr>
+<tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/215684270-f047d6b0-9508-490a-be4b-2f872c0d294e.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>#2 Python Extension<br></p>
+</td></tr>
+<tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/215684570-7d45bb8f-d2ae-4745-b72c-adc83131f10d.JPG"/></td></tr>
+<tr><td> <em>Caption:</em> <p>#3 MYSql Extension<br></p>
+</td></tr>
+</table></td></tr>
+</table></td></tr>
+<table><tr><td> <em>Deliverable 2: </em> Verify Database Creation/Connectivity </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
+<tr><td><table><tr><td> <em>Sub-Task 1: </em> Screenshot showing your database and initial tables from your IDE MySQL extension</td></tr>
+<tr><td><table><tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/215684836-5e2a4ceb-aadd-45ad-b3cf-1e904f05487f.JPG"/></td></tr>
+<tr><td> <em>Caption:</em> <p>Connection to Database - UCID gi36<br></p>
+</td></tr>
+</table></td></tr>
+</table></td></tr>
+<table><tr><td> <em>Deliverable 3: </em> Discussion </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
+<tr><td><table><tr><td> <em>Sub-Task 1: </em> Talk about what you learned during this module, anything interesting, new, etc.</td></tr>
+<tr><td> <em>Response:</em> <p><b>Things that I learnt in this module</b><div><b><br></b><div><b>1. Git</b><br></div><div>* g<b>it add</b> -&nbsp;&nbsp;Moves changes from<br>the working directory to the staging area. This gives us the opportunity to<br>prepare a snapshot before committing it to the official history.</div><div>* <b>git commit -m<br>&quot;message&quot;</b> -&nbsp;Takes the staged snapshot and commits it to the project history. Combined<br>with git add, this defines the basic workflow for all Git users.</div><div>* <b>git<br>push</b> -&nbsp;&nbsp;It lets you push the code from a local branch to git<br>repository branch</div><div>* <b>git pull -&nbsp;</b>it lets us pull the latest code from git<br>repository branch to our local system</div><div><em><b> git stash -&nbsp;</b>clears out all the changes<br>in the local system</div><div></em> <b>git clone -</b>&nbsp;creates a copy of an existing Git<br>repository. Cloning is the most common way for developers to obtain a working<br>copy of a repository.</div><div>* <b>git branch -&nbsp;</b>shows all the branches in the current<br>repository</div><div>* <b>git checkout - </b>lets us navigate to other branches</div><div>* <b>git status -&nbsp;</b>&nbsp;shows<br>the status of all the uncommitted changes in the local system<br><br>2. <b>VS code<br>and extensions</b><br><em>&nbsp;Indent Rainbow</div><div></em> Git Lens</div><div>* MYSql</div><div>* Thunder Lens</div><div><em>&nbsp; WakaTime</div><div></em> Python extension</div><div>* SQLTools</div><div>* Todo<br>Tree&nbsp;</div><div><br></div><div>3. <b>Python installation&nbsp;</b></div><div><a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a><br></div><div><br></div><div>4. <b>Command line commands&nbsp;</b></div><div>* ls</div><div>* cd</div><div>* clear</div><div>* env</div><div>* cd..</div><div>* alias</div><div>* nano</div><div><em><br>pwd</div><div></em> rm</div><div>* touch&nbsp;</div><div><br></div><div>5. <b>Learn platform and discord setup</b></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div></div><br></p><br></td></tr>
+</table></td></tr>
+<table><tr><td> <em>Deliverable 4: </em> Issues </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
+<tr><td><table><tr><td> <em>Sub-Task 1: </em> Did you have any issues? If so, how did you resolve them? If no issues, just type "no issues".</td></tr>
+<tr><td> <em>Response:</em> <p>no issue :)<br></p><br></td></tr>
+</table></td></tr>
+<table><tr><td> <em>Deliverable 5: </em> Pull Request Link </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
+<tr><td><table><tr><td> <em>Sub-Task 1: </em> Add the pull request link here (it should end in /pull/#)</td></tr>
+<tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/ikgagan/IS601/pull/1">https://github.com/ikgagan/IS601/pull/1</a> </td></tr>
+</table></td></tr>
+<table><tr><td><em>Grading Link: </em><a rel="noreferrer noopener" href="https://learn.ethereallab.app/homework/IS601-006-S23/is601-m1-gettingstarted/grade/gi36" target="_blank">Grading</a></td></tr></table>
