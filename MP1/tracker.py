@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+import os
 
 tasks = []
 # constant, don't edit, use .copy()
@@ -28,7 +29,10 @@ def save():
 
 def load():
     """ loads the task list from a json file """
+    if not os.path.isfile("tracker.json"):
+        return
     f = open("tracker.json", "r")
+    
     data = json.load(f)
     # Note about global keyword: https://stackoverflow.com/a/11867510
     global tasks
