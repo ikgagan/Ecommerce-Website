@@ -54,14 +54,28 @@ def list_tasks(_tasks):
 def add_task(name: str, description: str, due: str):
     """ Copies the TASK_TEMPLATE and fills in the passed in data then adds the task to the tasks list """
     task = TASK_TEMPLATE.copy() # don't delete this
-    # update lastActivity with the current datetime value
-    # set the name, description, and due date (all must be provided)
-    # due date must match one of the formats mentioned in str_to_datetime()
-    # add the new task to the tasks list
-    # output a message confirming the new task was added or if the addition was rejected due to missing data
-    # make sure save() is still called last in this function
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    save()
+    # Gagan Indukala Krishna Murthy - gi36 - 15th Feb 2023
+    # Summary : I used the copy function of copy module to the task dict and initialized it with values from the user input and appeneded it to the tasks list. 
+    # I also performed input validation for input name or description or due from the user and also validated the proper date and time format for due by exception handling.
+    # I added a print statment in the end for succesfully adding a task
+    now = datetime.now()  # datetime object containing current date and time
+    dt_string = now.strftime("%m/%d/%y %H:%M:%S") # mm/dd/yy H:M:S
+    if name=="" or description =="" or due =="": # I also performed input validation for input name or description or due
+        print("Task rejected, please enter a valid task input")
+        return
+    try:
+        str_to_datetime(due) # Due date must match one of the formats mentioned in str_to_datetime()
+    except Exception as e: # Exception handling for the unhandled cases 
+        print("Task rejected due to invalid date and time format")
+        return
+    task["name"] = name # set the name 
+    task["due"] = due # set the due date 
+    task["description"] = description # set the description
+    task["lastActivity"] = dt_string  # update lastActivity with the current datetime value
+    task["done"] = False # False if not done, datetime otherise   
+    tasks.append(task) # add the new task to the tasks list
+    print("Task added successfully")  # output a message confirming the new task was added or if the addition was rejected due to missing data
+    save() # make sure save() is still called last in this function
 
 def process_update(index):
     """ extracted the user input prompts to get task data then passes it to update_task() """
@@ -179,6 +193,9 @@ def run():
             print("That's not a valid option")
         elif opt == "add":
             name = input("What's the name of this task?\n").strip()
+            # if name=="":
+            #     print("Task rejected, please enter a valid name")
+            #     continue
             desc = input("What's a brief descriptions of this task?\n").strip()
             due = input("When is this task due (visual format: mm/dd/yy hh:mm:ss)\n").strip()
             add_task(name, desc, due)
