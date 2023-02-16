@@ -60,8 +60,14 @@ def add_task(name: str, description: str, due: str):
     # I added a print statment in the end for succesfully adding a task
     now = datetime.now()  # datetime object containing current date and time
     dt_string = now.strftime("%m/%d/%y %H:%M:%S") # mm/dd/yy H:M:S
-    if name=="" or description =="" or due =="": # I also performed input validation for input name or description or due
-        print("Task rejected, please enter a valid task input")
+    if name=="": # I also performed input validation for input name or description or due
+        print("Adding Task rejected, please enter a valid task name")
+        return
+    elif description =="":
+        print("Adding Task rejected, please enter a valid task description")
+        return
+    elif due =="":
+        print("Adding Task rejected, please enter a valid task due date")
         return
     try:
         str_to_datetime(due) # Due date must match one of the formats mentioned in str_to_datetime()
@@ -79,14 +85,18 @@ def add_task(name: str, description: str, due: str):
 
 def process_update(index):
     """ extracted the user input prompts to get task data then passes it to update_task() """
-    # get the task by index
-    # consider index out of bounds scenarios and include appropriate message(s) for invalid index
-    # show the existing value of each property where the TODOs are marked in the text of the inputs (replace the TODO related text)
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    
-    name = input(f"What's the name of this task? (TODO name) \n").strip()
-    desc = input(f"What's a brief descriptions of this task? (TODO description) \n").strip()
-    due = input(f"When is this task due (format: m/d/y H:M:S) (TODO due) \n").strip()
+    # Gagan Indukala Krishna Murthy - gi36 - 16th Feb 2023 - process_update
+    # Sumamry: To start I passed index to tasks list to get the index number, later to the same I passed name, description 
+    # and due to get the current name, description and due of the input index by the user.
+    # To validate the index bound I added a if condition "len(tasks)-1 < index or index < 0" if the condition passes then it print a index out of bound error message
+    # get the task by index - tasks[index]
+    if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+        print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
+        return
+    # show the existing value of each property where the TODOs are marked in the text of the inputs (replace the TODO related text) (line 97 to 99) 
+    name = input(f"What's the name of this task? Current name: {tasks[index]['name']} \n").strip()
+    desc = input(f"What's a brief descriptions of this task? Current description: {tasks[index]['description']} \n").strip()
+    due = input(f"When is this task due (format: m/d/y H:M:S). Current due: {tasks[index]['due']} \n").strip()
     update_task(index, name=name, description=desc, due=due)
 
 def update_task(index: int, name: str, description:str, due: str):
@@ -98,7 +108,6 @@ def update_task(index: int, name: str, description:str, due: str):
     # output that the task was updated if any items were changed, otherwise mention task was not updated
     # make sure save() is still called last in this function
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    
     save()
 
 def mark_done(index):
