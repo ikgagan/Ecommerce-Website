@@ -11,7 +11,6 @@ TASK_TEMPLATE = {
     "description": "",
     "done": False # False if not done, datetime otherise
 }
-
 # don't edit, intentionaly left an unhandled exception possibility
 def str_to_datetime(datetime_str):
     """ attempts to convert a string in one of two formats to a datetime
@@ -101,32 +100,57 @@ def process_update(index):
 
 def update_task(index: int, name: str, description:str, due: str):
     """ Updates the name, description , due date of a task found by index if an update to the property was provided """
-    # find the task by index
-    # consider index out of bounds scenarios and include appropriate message(s) for invalid index
-    # update incoming task data if it's provided (if it's not provided use the original task property value)
-    # update lastActivity with the current datetime value
-    # output that the task was updated if any items were changed, otherwise mention task was not updated
-    # make sure save() is still called last in this function
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    save()
+    # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023 
+    # Summary: To start with i did the validation for index out of bound scenario by writing a if condition and checking if the length of tasks-1 is less than index
+    # or index is less than zero if this condition is true then the index is out of bound, I will be displaying an error message for the same. 
+    # later I am call 3 if condition for name description and due to check if it not equal to a empty string, if the condition passes then i will be taking the input
+    # passed from the process_update function and replacing with the existing values( which is basically updating). 
+    # by using datetime class from datetime module I am taking current time in mm/dd/yy H:M:S format and overiding the current lastActivity value.
+    # For the final output for success message I am using a variable is_updated which will be initially false, which I will be making true if a if condtion is executed 
+    # In the end if the is_updated is true then I am printing the success message else I will print the task not updated message.
+    # find the task by index - tasks[index]
+    is_updated = False 
+    if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+        print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
+        return
+    if description != "":
+        tasks[index]['description'] = description  # update incoming task data if it's provided (if it's not provided use the original task property value)
+        is_updated = True
+    if name != "":
+        tasks[index]['name'] = name # update incoming task data if it's provided (if it's not provided use the original task property value)
+        is_updated = True
+    if due != "":
+        tasks[index]['due'] = due # update incoming task data if it's provided (if it's not provided use the original task property value)
+        is_updated = True
+    now = datetime.now()  # datetime object containing current date and time
+    dt_string = now.strftime("%m/%d/%y %H:%M:%S") # mm/dd/yy H:M:S
+    tasks[index]['lastActivity'] = dt_string # update lastActivity with the current datetime value
+    if is_updated:
+        print("Task was successfully updated") # output that the task was updated if any items were changed, otherwise mention task was not updated
+    else:
+        print("Task was not updated")# output that the task was updated if any items were changed, otherwise mention task was not updated
+    save() # make sure save() is still called last in this function
 
 def mark_done(index):
     """ Updates a single task, via index, to a done datetime"""
-    # find task from list by index
-    # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023 
+    # find task from list by index - tasks[index]
+    if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+        print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
+        return
     # if it's not done, record the current datetime as the value
     # if it is done, print a message saying it's already completed
-    # make sure save() is still called last in this function
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-
-    save()
+    save() # make sure save() is still called last in this function
 
 def view_task(index):
     """ View more info about a specific task fetch by index """
-    # find task from list by index
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023
+    # find task from list by index - tasks[index]
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
     # utilize the given print statement when a task is found
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     task = {}
     print(f"""
         [{'x' if task['done'] else ' '}] Task: {task['name']}\n 
@@ -139,13 +163,12 @@ def view_task(index):
 
 def delete_task(index):
     """ deletes a task from the tasks list by index """
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023
     # delete/remove task from list by index
     # message should show if it was successful or not
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
-    # make sure save() is still called last in this function
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    
-    save()
+    save() # make sure save() is still called last in this function
 
 def get_incomplete_tasks():
     """ prints a list of tasks that are not done """
