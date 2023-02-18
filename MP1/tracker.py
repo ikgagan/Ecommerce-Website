@@ -107,7 +107,7 @@ def update_task(index: int, name: str, description:str, due: str):
     # later I am call 3 if condition for name description and due to check if it not equal to a empty string, if the condition passes then i will be taking the input
     # passed from the process_update function and replacing with the existing values( which is basically updating). 
     # by using datetime class from datetime module I am taking current time in mm/dd/yy H:M:S format and overiding the current lastActivity value.
-    # For the final output for success message I am using a variable is_updated which will be initially false, which I will be making true if a if condtion is executed 
+    # For the final output for success message I am using a variable is_updated which will be initially false, which I will be making true if a if condition is executed 
     # In the end if the is_updated is true then I am printing the success message else I will print the task not updated message.
     # find the task by index - tasks[index]
     is_updated = False 
@@ -129,7 +129,7 @@ def update_task(index: int, name: str, description:str, due: str):
     if is_updated:
         print("Task was successfully updated") # output that the task was updated if any items were changed, otherwise mention task was not updated
     else:
-        print("Task was not updated")# output that the task was updated if any items were changed, otherwise mention task was not updated
+        print("Task was not updated because there were no changes made")# output that the task was updated if any items were changed, otherwise mention task was not updated
     save() # make sure save() is still called last in this function
 
 def mark_done(index):
@@ -140,6 +140,7 @@ def mark_done(index):
     if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
         print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
         return
+    
     # if it's not done, record the current datetime as the value
     # if it is done, print a message saying it's already completed
     save() # make sure save() is still called last in this function
@@ -148,12 +149,22 @@ def view_task(index):
     """ View more info about a specific task fetch by index """
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023
+    # Sumamry
     # find task from list by index - tasks[index]
-    # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+    if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+        print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
+        return
+    task = {
+    "name":tasks[index]['name'],
+    "due": tasks[index]['due'],
+    "lastActivity": tasks[index]['lastActivity'], 
+    "description": tasks[index]['description'],
+    "done": tasks[index]['done'] 
+    }
     # utilize the given print statement when a task is found
-    task = {}
-    print(f"""
-        [{'x' if task['done'] else ' '}] Task: {task['name']}\n 
+    print(f""" 
+        [{'x' if task['done'] else ' '}] 
+        Task: {task['name']}\n 
         Description: {task['description']} \n 
         Last Activity: {task['lastActivity']} \n
         Due: {task['due']}\n
@@ -165,9 +176,11 @@ def delete_task(index):
     """ deletes a task from the tasks list by index """
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023
-    # delete/remove task from list by index
-    # message should show if it was successful or not
-    # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+    if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+        print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
+        return
+    tasks.remove(tasks[index])  # delete/remove task from list by index
+    print("Task deleted successfully")# message should show if it was successful or not
     save() # make sure save() is still called last in this function
 
 def get_incomplete_tasks():
