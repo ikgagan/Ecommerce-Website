@@ -191,7 +191,7 @@ def delete_task(index):
     # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023
     # Summary: To start with I am checking the index out of bound senarios in the usual way(like previous functions) 
     # to remove a particular task I am using remove() method - The remove() method takes a single element as an argument and removes it from the list.
-    # in the end printing for calling the save() function I am printing a success message if the task is deleted successfully. 
+    # in the end printing for calling the save() function and  I am printing a success message if the task is deleted successfully. 
     if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
         print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
         return
@@ -207,7 +207,7 @@ def get_incomplete_tasks():
     # later in the for loop we can checking a condition if any task doesnot have task['done'] = true then we are appending those tasking to the empty list 
     # which is __task = [] which was pre delcared in the template. 
     # that list is being passed to the list_task functions where the print statement is called for this. 
-    # I am passing print_flag = Flase to load() function because I am using it as a condition to not print the data which is being print in the load() function
+    # I am passing print_flag = False to load() function because I am using it as a condition to not print the data which is being print in the load() function
     _tasks = []
     load(print_flag=False)
     for task in tasks:
@@ -331,5 +331,5 @@ def run():
         
 if __name__ == "__main__":
     run()
-    
+
 # I hope I made justice to the code :)
