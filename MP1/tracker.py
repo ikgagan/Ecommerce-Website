@@ -138,6 +138,11 @@ def mark_done(index):
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023 
     # find task from list by index - tasks[index]
+    # Summary: First I am checking for the index out of bounds scenarios like the usual way like how I have done in the previous functions. 
+    # For the main function I am using a if else condition in which I am checking if done is equal to true for the given index, if this condition passes
+    # then I am marking done as true and updating the lastActivity to current datetime by using the datetime class from datetime module and formating the datetime 
+    # accroding to our format required format and I am also printing the task was marked done successfully message. 
+    # in the else I am printing the message Task is already completed. 
     if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
         print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
         return
@@ -155,7 +160,9 @@ def view_task(index):
     """ View more info about a specific task fetch by index """
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023
-    # Sumamry
+    # Sumamry: To start with I am checking the index out of bound senarios in the usual way(like previous functions) 
+    # To the empty dict task I passed key of name, due, lastActivity, description, done and their value using index.
+    # Using this dict task we are printing the request for view function. 
     # find task from list by index - tasks[index]
     if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
         print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
@@ -182,6 +189,9 @@ def delete_task(index):
     """ deletes a task from the tasks list by index """
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 17th feb 2023
+    # Summary: To start with I am checking the index out of bound senarios in the usual way(like previous functions) 
+    # to remove a particular task I am using remove() method - The remove() method takes a single element as an argument and removes it from the list.
+    # in the end printing for calling the save() function I am printing a success message if the task is deleted successfully. 
     if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
         print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
         return
@@ -193,6 +203,11 @@ def get_incomplete_tasks():
     """ prints a list of tasks that are not done """
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 19th feb 2023
+    # Summary: I am calling the load() function for loading the data in to our task. 
+    # later in the for loop we can checking a condition if any task doesnot have task['done'] = true then we are appending those tasking to the empty list 
+    # which is __task = [] which was pre delcared in the template. 
+    # that list is being passed to the list_task functions where the print statement is called for this. 
+    # I am passing print_flag = Flase to load() function because I am using it as a condition to not print the data which is being print in the load() function
     _tasks = []
     load(print_flag=False)
     for task in tasks:
@@ -204,6 +219,12 @@ def get_overdue_tasks():
     """ prints a list of tasks that are over due completion (not done and expired) """
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 19th feb 2023
+    # Summary: I am using datetime class from datetime module for comparing with the due time to checking if the task is overdue or not.
+    # I am calling the load() function for loading the data in to our task. 
+    # later in the for loop we can checking a condition if task[done] == false and the due time is lesser the now, if this condition passes 
+    # then I am appending those tasks which satify the if condition to empty list of _tasks
+    # now I have the overdue data in my list _tasks, which I am passing to list_tasks. list_tasks function has a print statement which is printing the result for this function
+    # I am passing print_flag = Flase to load() function because I am using it as a condition to not print the data which is being print in the load() function
     now = datetime.now()  # datetime object containing current date and time
     _tasks = []
     load(print_flag=False)
@@ -216,9 +237,20 @@ def get_time_remaining(index):
     """ outputs the number of days, hours, minutes, seconds a task has before it's overdue otherwise shows similar info for how far past due it is """
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # Gagan Indukala Krishna Murthy - gi36 - 19th feb 2023
+    # Summary:To start with I am checking the index out of bound senarios in the usual way(like previous functions)
+    # I am using datetime class from datetime module to get the current time so that i can use it my if else condition to get the remaining time
+    # for this functions I have 3 major condition if, if else and else.
+    # In the if condition I am checking two conditions. 1. done is equal to false for the given index and 
+    # 2. the due date of the task for the given index is lesser than or equal to the current time. 
+    # if this condition passes then I am returning a print statement in which i am stating the remaining time by 
+    # subtracting the due date and time with the current date and time and showing it to the user. 
+    # In the if else condition I am again checkking 2 condtions 1. done is equal to false for the given index and 
+    # 2. the due date of the task for the given index is greater than the current time. 
+    # if this condition passes the i am prining the overdue time by subtracting the current date and time by the due date and time
+    # if both the if and if else conditions fails then the else will get executed, which is the task is already completed. 
+
     # get the task by index - tasks[index]
     now = datetime.now()  # datetime object containing current date and time
-    dt_string = now.strftime("%m/%d/%y %H:%M:%S") # mm/dd/yy H:M:S
     if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
         print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
         return
@@ -230,7 +262,7 @@ def get_time_remaining(index):
         print(f"The task is overdue by {now - str_to_datetime(tasks[index]['due'])} ") # get the days, hours, minutes, seconds between the due date and now
     else:
         print("The task is already completed")
-        
+
     task = {}
 
 # no changes needed below this line
@@ -299,3 +331,5 @@ def run():
         
 if __name__ == "__main__":
     run()
+    
+# I hope I made justice to the code :)
