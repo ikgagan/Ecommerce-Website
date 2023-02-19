@@ -26,7 +26,7 @@ def save():
     f.write(json.dumps(tasks, indent=4, default=str))
     f.close()
 
-def load():
+def load(print_flag=True):
     """ loads the task list from a json file """
     if not os.path.isfile("tracker.json"):
         return
@@ -37,7 +37,8 @@ def load():
     global tasks
     tasks = data
     f.close()
-    print(f"data {data}")    
+    if print_flag:
+        print(f"data {data}")    
 
 def list_tasks(_tasks):
     """ List a summary view of all tasks """
@@ -140,9 +141,14 @@ def mark_done(index):
     if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
         print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
         return
-    
-    # if it's not done, record the current datetime as the value
-    # if it is done, print a message saying it's already completed
+    if tasks[index]['done'] == False:
+        tasks[index]['done'] = True
+        now = datetime.now()  # datetime object containing current date and time
+        dt_string = now.strftime("%m/%d/%y %H:%M:%S") # mm/dd/yy H:M:S
+        tasks[index]['lastActivity'] = dt_string # if it's not done, record the current datetime as the value
+        print("Task was marked done successfully")  # if it is done, print a message saying it's already completed
+    else:
+        print("Task is already completed") 
     save() # make sure save() is still called last in this function
 
 def view_task(index):
@@ -185,28 +191,46 @@ def delete_task(index):
 
 def get_incomplete_tasks():
     """ prints a list of tasks that are not done """
-    # generate a list of tasks where the task is not done
-    # pass that list into list_tasks()
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    # Gagan Indukala Krishna Murthy - gi36 - 19th feb 2023
     _tasks = []
+    load(print_flag=False)
+    for task in tasks:
+        if not task['done']: # generate a list of tasks where the task is not done
+            _tasks.append(task) # pass that list into list_tasks()
     list_tasks(_tasks)
 
 def get_overdue_tasks():
     """ prints a list of tasks that are over due completion (not done and expired) """
-    # generate a list of tasks where the due date is older than now and that are not complete
-    # pass that list into list_tasks()
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    # Gagan Indukala Krishna Murthy - gi36 - 19th feb 2023
+    now = datetime.now()  # datetime object containing current date and time
     _tasks = []
+    load(print_flag=False)
+    for task in tasks:
+        if task['done'] == False and str_to_datetime(task['due']) < now:  # generate a list of tasks where the due date is older than now and that are not complete
+            _tasks.append(task)# pass that list into list_tasks()
     list_tasks(_tasks)
 
 def get_time_remaining(index):
     """ outputs the number of days, hours, minutes, seconds a task has before it's overdue otherwise shows similar info for how far past due it is """
-    # get the task by index
-    # consider index out of bounds scenarios and include appropriate message(s) for invalid index
-    # get the days, hours, minutes, seconds between the due date and now
-    # display the remaining time via print in a clear format showing days, hours, minutes, seconds
-    # if the due date is in the past print out how many days, hours, minutes, seconds the task is over due (clearly note that it's over due, values should be positive)
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    # Gagan Indukala Krishna Murthy - gi36 - 19th feb 2023
+    # get the task by index - tasks[index]
+    now = datetime.now()  # datetime object containing current date and time
+    dt_string = now.strftime("%m/%d/%y %H:%M:%S") # mm/dd/yy H:M:S
+    if len(tasks)-1 < index or index < 0: # consider index out of bounds scenarios and include appropriate message(s) for invalid index
+        print(f"Index out of bounds, please enter a index less than or equal to {len(tasks)} and greater than 0")
+        return
+    # display the remaining time via print in a clear format showing days, hours, minutes, seconds
+    if tasks[index]['done'] == False and str_to_datetime(tasks[index]['due']) >= now: 
+        print(f"The remaining time for this task is {str_to_datetime(tasks[index]['due']) - now} ") # get the days, hours, minutes, seconds between the due date and now
+    # if the due date is in the past print out how many days, hours, minutes, seconds the task is over due (clearly note that it's over due, values should be positive)
+    elif tasks[index]['done'] == False and str_to_datetime(tasks[index]['due']) < now:
+        print(f"The task is overdue by {now - str_to_datetime(tasks[index]['due'])} ") # get the days, hours, minutes, seconds between the due date and now
+    else:
+        print("The task is already completed")
+        
     task = {}
 
 # no changes needed below this line
@@ -238,9 +262,6 @@ def run():
             print("That's not a valid option")
         elif opt == "add":
             name = input("What's the name of this task?\n").strip()
-            # if name=="":
-            #     print("Task rejected, please enter a valid name")
-            #     continue
             desc = input("What's a brief descriptions of this task?\n").strip()
             due = input("When is this task due (visual format: mm/dd/yy hh:mm:ss)\n").strip()
             add_task(name, desc, due)
