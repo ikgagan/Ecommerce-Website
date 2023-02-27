@@ -139,7 +139,7 @@ if __name__ == '__main__':
                 r = calc.div(nums[0].strip(), nums[1].strip()) 
                 print("Result is " + str(r)) # printing the final result to the user
             elif "*" in iSTR or "x" in iSTR: # this condition runs if there is a 'x' or '*' symbol in the input equation
-                nums = iSTR.split("*") if "*" in iSTR else iSTR.split("x") # the equation is split using .split() method into 2 parts keeping 'x' or '*' as the 
+                nums = iSTR.split("*") if "*" in iSTR else iSTR.split("x") # the equation is split using .split() method into 2 parts keeping 'x' or '*' as the reference and stored in array called nums
                 # line - 148 and 149
                 # r is the output if the equation
                 # nums has the 2 numbers using which the multiplication has to be performed. 
@@ -149,7 +149,12 @@ if __name__ == '__main__':
                 print("Result is " + str(r)) # printing the final result to the user
             # must be done last so negative numbers work
             elif "-" in iSTR: # this condition runs if there is a '-' symbol in the input equation
-                nums = iSTR.split("-") # the equation is split using .split() method into 2 parts keeping '-' as the reference and stored in array called nums
+                iSTR = iSTR.replace(" ", "") # Removing all the white spaces from the string to remove complications while subtracting negative numbers. 
+                if "--" in iSTR : # Here we are checking for if subtrahend is a negative number by checking if there is "--" in the string
+                    nums = iSTR.split("--") # if the above condition passes then we are spliting the string using "--" as the refrence
+                    nums[-1] = f"-{nums[-1]}" # since in the above line we removed the negative sign for the subtrahend, now we are adding it back again manually
+                else:
+                    nums = iSTR.rsplit("-",1) # the equation is split using .rsplit() method into 2 parts keeping '-' and length 1 as the reference and stored in array called nums
                 # line - 158 and 159
                 # r is the output if the equation
                 # nums has the 2 numbers using which the subtraction has to be performed. 
