@@ -3,7 +3,7 @@ from enum import Enum
 # make a tests folder under the folder you're putting these files in
 # add an empty __init__.py to the tests folder
 from IcecreamExceptions import ExceededRemainingChoicesException, InvalidChoiceException, NeedsCleaningException, OutOfStockException
-from IcecreamExceptions import InvalidPaymentException
+from IcecreamExceptions import InvalidPaymentException, InvalidCombinationException, NoItemChosenException
 
 class Usable:
     name = ""
@@ -76,7 +76,7 @@ class IceCreamMachine:
 
     def pick_container(self, choice):
         for c in self.containers:
-            if c.name.lower() == choice:
+            if c.name.lower() == choice.lower():
                 c.use()
                 self.inprogress_icecream.append(c)
                 return
@@ -88,7 +88,8 @@ class IceCreamMachine:
         if self.remaining_scoops <= 0:
             raise ExceededRemainingChoicesException
         for f in self.flavors:
-            if f.name.lower() == choice:
+            # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+            if f.name.lower() == choice.lower():
                 f.use()
                 self.inprogress_icecream.append(f)
                 self.remaining_scoops -= 1
@@ -100,7 +101,8 @@ class IceCreamMachine:
         if self.remaining_toppings <= 0:
             raise ExceededRemainingChoicesException
         for t in self.toppings:
-            if t.name.lower() == choice:
+            # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+            if t.name.lower() == choice.lower():
                 t.use()
                 self.inprogress_icecream.append(t)
                 self.remaining_toppings -= 1
@@ -121,19 +123,26 @@ class IceCreamMachine:
         self.currently_selecting = STAGE.Flavor
 
     def handle_flavor(self, flavor):
-        if flavor == "next":
+        if not self.inprogress_icecream:
+            raise InvalidCombinationException
+        elif flavor == "next":
             self.currently_selecting = STAGE.Toppings
         else:
             self.pick_flavor(flavor)
 
     def handle_toppings(self, toppings):
-        if toppings == "done":
+        if not self.inprogress_icecream:
+            raise InvalidCombinationException
+        if toppings == "done" and any(item in self.flavors + self.toppings for item in self.inprogress_icecream):
             self.currently_selecting = STAGE.Pay
+        elif toppings == "done":
+            raise NoItemChosenException
         else:
             self.pick_toppings(toppings)
 
     def handle_pay(self, expected, total):
-        if total == str(expected):
+        # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+        if total == f"{expected:.2f}":
             print("Thank you! Enjoy your icecream!")
             self.total_icecreams += 1
             self.total_sales += expected # only if successful
@@ -142,8 +151,11 @@ class IceCreamMachine:
             raise InvalidPaymentException
             
     def calculate_cost(self):
-        # TODO add the calculation expression/logic for the inprogress_icecream
-        return 10000
+        # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+        self.cost = 0
+        for item in self.inprogress_icecream:
+            self.cost += item.cost
+        return round(self.cost, 2)
 
     def run(self):
         if self.currently_selecting == STAGE.Container:

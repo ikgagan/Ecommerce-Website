@@ -1,4 +1,3 @@
-
 import pytest
 # make sure there's an __init__.py in this tests folder and that
 # the tests folder is in the same folder as the IcecreamMachine stuff
