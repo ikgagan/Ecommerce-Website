@@ -74,6 +74,8 @@ class IceCreamMachine:
 
     def pick_container(self, choice):
         for c in self.containers:
+            # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+            # added lower to take input as caps and not give a error
             if c.name.lower() == choice.lower():
                 c.use()
                 self.inprogress_icecream.append(c)
@@ -87,6 +89,7 @@ class IceCreamMachine:
             raise ExceededRemainingChoicesException
         for f in self.flavors:
             # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+            # added lower to take input as caps and not give a error
             if f.name.lower() == choice.lower():
                 f.use()
                 self.inprogress_icecream.append(f)
@@ -100,6 +103,7 @@ class IceCreamMachine:
             raise ExceededRemainingChoicesException
         for t in self.toppings:
             # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+            # added lower to take input as caps and not give a error
             if t.name.lower() == choice.lower():
                 t.use()
                 self.inprogress_icecream.append(t)
@@ -139,7 +143,6 @@ class IceCreamMachine:
             self.pick_toppings(toppings)
 
     def handle_pay(self, expected, total):
-        # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
         if total == f"{expected:.2f}":
             print("Thank you! Enjoy your icecream!")
             self.total_icecreams += 1
@@ -150,20 +153,26 @@ class IceCreamMachine:
             
     def calculate_cost(self):
         # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+        # Summary: Keeping cost initially as zero
         self.cost = 0
+        # adding the input item cost from the user in a loop for ever input of items.
         for item in self.inprogress_icecream:
             self.cost += item.cost
-        return round(self.cost, 2)
+        return round(self.cost, 2) # round the numbers after decimal
 
     def run(self):
         try:
             if self.currently_selecting == STAGE.Container:
+                # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
                 container = input(f"Would you like a {', '.join(list(map(lambda c:c.name.lower(), filter(lambda c: c.in_stock(), self.containers))))}?\n")
                 self.handle_container(container)
             elif self.currently_selecting == STAGE.Flavor:
                 flavor = input(f"Would you like {', '.join(list(map(lambda f:f.name.lower(), filter(lambda f: f.in_stock(), self.flavors))))}? Or type next.\n")
                 try:
                     self.handle_flavor(flavor)
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary: If the flavor is exceeded more than 3 then we are automatically going to the next stage after displaying line 176 as output to the user
+                    # Changed to toppings stage
                 except ExceededRemainingChoicesException:
                     print("Sorry! You've exceeded the maximum number of flavors that you can select, please choose a topping")
                     self.currently_selecting = STAGE.Toppings
@@ -171,9 +180,14 @@ class IceCreamMachine:
                 toppings = input(f"Would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n")
                 try:
                     self.handle_toppings(toppings)
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary:If the toppings is exceeded more than 3 then we are automatically going to the next stage after displaying line 187 as output to the user
+                    # Changed to displaying the total cost stage and getting paid from the user
                 except ExceededRemainingChoicesException:
                     print("Sorry! You've exceeded the maximum number of toppings; proceeding to the payment portal")
                     self.currently_selecting = STAGE.Pay
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary: If there is no flavours or toppings choosen then NoItemChosenException will be executed and we are redirecting to the flavour stage
                 except NoItemChosenException:
                     print("Please choose at least one scoop or topping.")
                     self.currently_selecting = STAGE.Flavor
@@ -182,19 +196,31 @@ class IceCreamMachine:
                 total = input(f"Your total is ${expected:.2f}, please enter the exact value.\n")
                 try:
                     self.handle_pay(expected, total)
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary: If the amount entered by  the user doesnot match the total amount line 203 will be printed.
+                    # user will be given another change to enter the right amount
                 except InvalidPaymentException:
                     print("You've entered a wrong amount. Please try again :)")
                     self.run()
                 choice = input("What would you like to do? (icecream or quit)\n")
                 if choice == "quit":
                     exit()
+        # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # Summary: If any of the above input items from the user is out of stock then line 212
+        # and the user will be redirected to select differnt items
         except OutOfStockException:
             print("The selected option is out of stock. Please select another option")
+        # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # Summary: If the USES_UNTIL_CLEANING exceed 100 then the user will be promted with line 217 as the output
+        # when the user types "yes" then the line 219 is shown as the output and continued with normal activities 
         except NeedsCleaningException:
             choice = input("Sorry, The machine needs cleaning! Please type yes to clean the machine \n")
             if choice.lower() == "yes":
                 print("The machine has been cleaned, you can continue")
                 self.clean_machine()
+        # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # In any of the above stage if the user has entered a invalid choice the InvalidChoiceException is called 
+        # and asked the user to choose again with the given options 
         except InvalidChoiceException:
             print("You've entered an invalid choice. Please choose from the given options")
         self.run()
