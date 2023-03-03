@@ -23,3 +23,11 @@ class InvalidPaymentException(Exception):
 class InvalidStageException(Exception):
     """Raised when an action occurs in the wrong stage"""
     pass
+
+class NoItemChosenException(Exception):
+    """Raised when atleast one topping or scoop isn't picked"""
+    pass
+
+class InvalidCombinationException(Exception):
+    """Raised when a topping or scoop is picked before a container"""
+    pass

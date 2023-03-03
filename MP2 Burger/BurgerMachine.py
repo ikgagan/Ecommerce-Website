@@ -1,7 +1,7 @@
 from enum import Enum
 import sys
 from BurgerMachineExceptions import ExceededRemainingChoicesException, InvalidChoiceException, InvalidStageException, NeedsCleaningException, OutOfStockException
-from BurgerMachineExceptions import InvalidPaymentException
+from BurgerMachineExceptions import InvalidPaymentException, InvalidCombinationException, NoItemChosenException
 
 class Usable:
     name = ""
@@ -127,21 +127,29 @@ class BurgerMachine:
         self.currently_selecting = STAGE.Patty
 
     def handle_patty(self, patty):
-        if patty == "next":
+        if not self.inprogress_burger:
+            raise InvalidCombinationException
+        elif patty == "next":
             self.currently_selecting = STAGE.Toppings
         else:
             self.pick_patty(patty)
 
+
     def handle_toppings(self, toppings):
-        if toppings == "done":
+        if not self.inprogress_burger:
+            raise InvalidCombinationException
+        if toppings == "done" and any(item in self.patties + self.toppings for item in self.inprogress_burger):
             self.currently_selecting = STAGE.Pay
+        elif toppings == "done":
+            raise NoItemChosenException
         else:
             self.pick_toppings(toppings)
+
 
     def handle_pay(self, expected, total):
         if self.currently_selecting != STAGE.Pay:
             raise InvalidStageException
-        if total == str(expected):
+        if total == f"{expected:.2f}":
             print("Thank you! Enjoy your burger!")
             self.total_burgers += 1
             self.total_sales += expected # only if successful
@@ -167,34 +175,60 @@ class BurgerMachine:
     def run(self):
         try:
             if self.currently_selecting == STAGE.Bun:
+                # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
                 bun = input(f"What type of bun would you like {', '.join(list(map(lambda c:c.name.lower(), filter(lambda c: c.in_stock(), self.buns))))}?\n")
                 self.handle_bun(bun)
                 self.print_current_burger()
             elif self.currently_selecting == STAGE.Patty:
                 patty = input(f"Would type of patty would you like {', '.join(list(map(lambda f:f.name.lower(), filter(lambda f: f.in_stock(), self.patties))))}? Or type next.\n")
-                self.handle_patty(patty)
-                self.print_current_burger()
+                try:
+                    self.handle_patty(patty)
+                except ExceededRemainingChoicesException:
+                    print("Sorry! You've exceeded the maximum number of pattys that you can select, please choose a topping")
+                    self.print_current_burger()
+                    self.currently_selecting = STAGE.Toppings
             elif self.currently_selecting == STAGE.Toppings:
                 toppings = input(f"What topping would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n")
-                self.handle_toppings(toppings)
-                self.print_current_burger()
+                try:
+                    self.handle_toppings(toppings)
+                except ExceededRemainingChoicesException:
+                    print("Sorry! You've exceeded the maximum number of toppings; proceeding to the payment portal")
+                    self.print_current_burger()
+                    self.currently_selecting = STAGE.Pay
+                except NoItemChosenException:
+                    print("Please choose at least one patty or topping.")
+                    self.currently_selecting = STAGE.Patty
             elif self.currently_selecting == STAGE.Pay:
                 expected = self.calculate_cost()
                 # show expected value as currency format
                 # require total to be entered as currency format
-                total = input(f"Your total is {expected}, please enter the exact value.\n")
-                self.handle_pay(expected, total)
-                
+                total = input(f"Your total is ${expected:.2f}, please enter the exact value.\n")
+                try:
+                    self.handle_pay(expected, total)
+                except InvalidPaymentException:
+                    print("You've entered a wrong amount. Please try again :)")
+                    self.run()
                 choice = input("What would you like to do? (order or quit)\n")
                 if choice == "quit":
                     #exit() in recursive functions creates stackoverflow
                     # use return 1 to exit
                     print("Quitting the burger machine")
                     return 1
+        except OutOfStockException:
+            print("The selected option is out of stock. Please select another option")
+        except NeedsCleaningException:
+            choice = input("Sorry, The machine needs cleaning! Please type 'clean' to clean the machine \n")
+            if choice.lower() == "clean":
+                print("The machine has been cleaned, you can continue")
+                self.clean_machine()
+        except InvalidChoiceException:
+            print("You've entered an invalid choice. Please choose from the given options")
+            self.run()
         except KeyboardInterrupt:
             # quit
             print("Quitting the burger machine")
             sys.exit()
+        
         # handle OutOfStockException
             # show an appropriate message of what stage/category was out of stock
         # handle NeedsCleaningException
