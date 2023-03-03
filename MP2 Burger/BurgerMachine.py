@@ -50,7 +50,7 @@ class BurgerMachine:
     patties = [Patty(name="Turkey", quantity=10, cost=1), Patty(name="Veggie", quantity=10, cost=1), Patty(name="Beef", quantity=10, cost=1)]
     toppings = [Topping(name="Lettuce", quantity=10, cost=.25), Topping(name="Tomato", quantity=10, cost=.25), Topping(name="Pickles", quantity=10, cost=.25), \
     Topping(name="Cheese", quantity=10, cost=.25), Topping(name="Ketchup", quantity=10, cost=.25),
-     Topping(name="Mayo", quantity=10, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
+    Topping(name="Mayo", quantity=10, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
 
 
     # variables
@@ -155,7 +155,14 @@ class BurgerMachine:
 
     def calculate_cost(self):
         # TODO add the calculation expression/logic for the inprogress_burger
-        return 10000
+        # Gagan Indukala Krishna Murthy - gi36 - 1st March 2023
+        # Summary: Keeping cost initially as zero
+        self.cost = 0
+        # adding the input item cost from the user in a loop for ever input of items.
+        for item in self.inprogress_burger:
+            self.cost += item.cost
+        return round(self.cost, 2) # round the numbers after decimal
+        
 
     def run(self):
         try:
