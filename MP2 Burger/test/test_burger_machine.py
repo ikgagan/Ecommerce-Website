@@ -4,6 +4,8 @@ import pytest
 from BurgerMachine import BurgerMachine
 from BurgerMachineExceptions import ExceededRemainingChoicesException, InvalidChoiceException, InvalidStageException, OutOfStockException
 #this is an example test showing how to cascade fixtures to build up state
+import random
+# Gagan Indukala Krishna Murthy - gi36 - 3nd March 2023
 
 @pytest.fixture
 def machine():
@@ -32,6 +34,9 @@ def second_order(first_order):
     first_order.handle_toppings("done")
     #machine.handle_pay(10000,"10000")
     return first_order
+
+
+
 
 # sample test case, can delete if not using
 def test_production_line(second_order):
