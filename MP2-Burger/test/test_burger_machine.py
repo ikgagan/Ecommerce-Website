@@ -25,24 +25,25 @@ def first_order(machine):
 
 # sample fixture, can delete if not using
 @pytest.fixture
-def second_order(first_order):
-    first_order.handle_bun("lettuce wrap")
-    first_order.handle_patty("turkey")
-    first_order.handle_patty("turkey")
-    first_order.handle_patty("next")
-    first_order.handle_toppings("cheese")
-    first_order.handle_toppings("cheese")
-    first_order.handle_toppings("done")
-    first_order.handle_pay(first_order.calculate_cost(), f"{first_order.calculate_cost():.2f}")
+def second_order(first_order, machine):
+    machine.handle_bun("lettuce wrap")
+    machine.handle_patty("turkey")
+    machine.handle_patty("beef")
+    machine.handle_patty("next")
+    machine.handle_toppings("cheese")
+    machine.handle_toppings("tomato")
+    machine.handle_toppings("done")
+    machine.handle_pay(machine.calculate_cost(), f"{machine.calculate_cost():.2f}")
     #machine.handle_pay(10000,"10000")
-    return first_order
+    return machine
 
 
 @pytest.fixture
 def third_order(second_order, machine):
     machine.handle_bun("no bun")
     machine.handle_patty("turkey")
-    machine.handle_patty("turkey")
+    machine.handle_patty("beef")
+    machine.handle_patty("next")
     machine.handle_toppings("cheese")
     machine.handle_toppings("done")
     machine.handle_pay(machine.calculate_cost(), f"{machine.calculate_cost():.2f}")
@@ -74,20 +75,22 @@ def test_patty_instock(machine):
         assert True
 
 # not working 
-# def test_toppings_instock(machine):
-#     try:
-#         # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-#         # This test case checks if the exception is raised when the out of stock toppings is choosen by the user.
-#         machine.reset()
-#         tmp = machine.toppings[0].quantity
-#         machine.toppings[0].quantity=0
-#         machine.handle_bun("White Burger Bun")
-#         machine.handle_patty(machine.patties[0].name)
-#         machine.handle_toppings(machine.toppings[1].name)
-#         assert False
-#     except OutOfStockException:
-#         machine.toppings[0].quantity = tmp
-#         assert True
+def test_toppings_instock(machine):
+    try:
+        # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # This test case checks if the exception is raised when the out of stock toppings is choosen by the user.
+        machine.reset()
+        tmp = machine.toppings[0].quantity
+        machine.toppings[0].quantity=0
+        print(machine.currently_selecting)
+        machine.handle_bun("White Burger Bun")
+        machine.handle_patty(machine.patties[0].name)
+        machine.handle_patty("next")
+        machine.handle_toppings(machine.toppings[0].name)
+        assert False
+    except OutOfStockException:
+        machine.toppings[0].quantity = tmp
+        assert True
 
 def test_max_patties(machine):
     try:
@@ -104,18 +107,19 @@ def test_max_patties(machine):
         assert True
 
 # not working 
-# def test_max_toppings(machine):
-#     try:
-#         # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-#         # This test case checks if the exception is raised when the user chooses more the 3 toppings is choosen.
-#         machine.handle_bun("White Burger Bun")
-#         machine.handle_toppings(machine.toppings[0].name)
-#         machine.handle_toppings(machine.toppings[0].name)
-#         machine.handle_toppings(machine.toppings[0].name)
-#         machine.handle_toppings(machine.toppings[0].name)
-#         assert False
-#     except ExceededRemainingChoicesException:
-#         assert True
+def test_max_toppings(machine):
+    try:
+        # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # This test case checks if the exception is raised when the user chooses more the 3 toppings is choosen.
+        machine.handle_bun("White Burger Bun")
+        machine.handle_patty("next")
+        machine.handle_toppings(machine.toppings[0].name)
+        machine.handle_toppings(machine.toppings[0].name)
+        machine.handle_toppings(machine.toppings[0].name)
+        machine.handle_toppings(machine.toppings[0].name)
+        assert False
+    except ExceededRemainingChoicesException:
+        assert True
 
 def test_cost_calculation(machine):
     # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
@@ -130,7 +134,9 @@ def test_cost_calculation(machine):
         expected_cost = random_buns.cost + random_patty.cost + random_topping.cost
         machine.handle_bun(random_buns.name)
         machine.handle_patty(random_patty.name)
+        machine.handle_patty("next")
         machine.handle_toppings(random_topping.name)
+        machine.handle_toppings("done")
         if f"{expected_cost:.2f}" != f"{machine.calculate_cost():.2f}":
             assert False
         machine.handle_pay(machine.calculate_cost(), f"{expected_cost:.2f}")
