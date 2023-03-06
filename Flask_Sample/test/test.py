@@ -1,2 +1,2 @@
-def sample():
+def test():
     assert True
