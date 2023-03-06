@@ -231,7 +231,7 @@ class BurgerMachine:
         except OutOfStockException:
             print("The selected option is out of stock. Please select another option")
             # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-        # Summary: If the USES_UNTIL_CLEANING exceed 100 then the user will be promted with needs cleaning message as the output
+        # Summary: If the USES_UNTIL_CLEANING exceed 15 then the user will be promted with needs cleaning message as the output
         # when the user types "clean" then "the machine as been cleaned" is shown as the output and continued with normal activities 
         except NeedsCleaningException:
             choice = input("Sorry, The machine needs cleaning! Please type 'clean' to clean the machine \n")
