@@ -15,6 +15,7 @@ def machine():
 # sample fixture, can delete if not using
 @pytest.fixture
 def first_order(machine):
+    machine.reset()
     machine.handle_bun("no bun")
     machine.handle_patty("veggie")
     machine.handle_patty("next")
@@ -149,8 +150,8 @@ def test_total_sales(third_order):
     # this functions test for total_sales 
     # if the total_sales is calculated properly
     # we are doing this test case using fixtures
-    first_order_expected_cost = 2
-    second_order_expected_cost = 2.5
+    first_order_expected_cost = 1
+    second_order_expected_cost = 4
     third_order_expected_cost = 2.25
     assert third_order.total_sales == first_order_expected_cost + second_order_expected_cost + third_order_expected_cost
 
