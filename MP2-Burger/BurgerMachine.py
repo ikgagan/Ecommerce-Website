@@ -183,6 +183,9 @@ class BurgerMachine:
                 patty = input(f"Would type of patty would you like {', '.join(list(map(lambda f:f.name.lower(), filter(lambda f: f.in_stock(), self.patties))))}? Or type next.\n")
                 try:
                     self.handle_patty(patty)
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary: If the patty is exceeded more than 3 then we are automatically going to the next stage after displaying error message as output to the user
+                    # Changed to toppings stage
                 except ExceededRemainingChoicesException:
                     print("Sorry! You've exceeded the maximum number of pattys that you can select, please choose a topping")
                     self.print_current_burger()
@@ -191,10 +194,15 @@ class BurgerMachine:
                 toppings = input(f"What topping would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n")
                 try:
                     self.handle_toppings(toppings)
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary:If the toppings is exceeded more than 3 then we are automatically going to the next stage after displaying an erro as output to the user
+                    # Changed to displaying the total cost stage and getting paid from the user
                 except ExceededRemainingChoicesException:
                     print("Sorry! You've exceeded the maximum number of toppings; proceeding to the payment portal")
                     self.print_current_burger()
                     self.currently_selecting = STAGE.Pay
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary: If there is no patty or toppings choosen then NoItemChosenException will be executed and we are redirecting to the patty stage
                 except NoItemChosenException:
                     print("Please choose at least one patty or topping.")
                     self.currently_selecting = STAGE.Patty
@@ -205,6 +213,9 @@ class BurgerMachine:
                 total = input(f"Your total is ${expected:.2f}, please enter the exact value.\n")
                 try:
                     self.handle_pay(expected, total)
+                    # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+                    # Summary: If the amount entered by  the user doesnot match the total amount. error message will be printed.
+                    # user will be given another chance to enter the right amount
                 except InvalidPaymentException:
                     print("You've entered a wrong amount. Please try again :)")
                     self.run()
@@ -214,13 +225,22 @@ class BurgerMachine:
                     # use return 1 to exit
                     print("Quitting the burger machine")
                     return 1
+        # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # Summary: If any of the above input items from the user is out of stock then error message is displayed 
+        # and the user will be redirected to select differnt items
         except OutOfStockException:
             print("The selected option is out of stock. Please select another option")
+            # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # Summary: If the USES_UNTIL_CLEANING exceed 100 then the user will be promted with needs cleaning message as the output
+        # when the user types "clean" then "the machine as been cleaned" is shown as the output and continued with normal activities 
         except NeedsCleaningException:
             choice = input("Sorry, The machine needs cleaning! Please type 'clean' to clean the machine \n")
             if choice.lower() == "clean":
                 print("The machine has been cleaned, you can continue")
                 self.clean_machine()
+        # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
+        # In any of the above stage if the user has entered a invalid choice the InvalidChoiceException is called 
+        # and asked the user to choose again with the given options
         except InvalidChoiceException:
             print("You've entered an invalid choice. Please choose from the given options")
             self.run()

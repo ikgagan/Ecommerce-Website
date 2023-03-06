@@ -64,7 +64,7 @@ def test_first_selection(machine):
 def test_patty_instock(machine):
     try:
         # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-        # This test case checks if the exception is raised when the out of stock flavour is choosen by the user.
+        # This test case checks if the exception is raised when the out of stock patty is choosen by the user.
         machine.reset()
         tmp = machine.patties[0].quantity
         machine.patties[0].quantity=0
@@ -75,7 +75,6 @@ def test_patty_instock(machine):
         machine.patties[0].quantity=tmp
         assert True
 
-# not working 
 def test_toppings_instock(machine):
     try:
         # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
@@ -96,7 +95,7 @@ def test_toppings_instock(machine):
 def test_max_patties(machine):
     try:
         # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-        # This test case checks if the exception is raised when the user chooses more the 3 flavours is choosen.
+        # This test case checks if the exception is raised when the user chooses more the 3 patties is choosen.
         machine.reset()
         machine.handle_bun("no bun")
         machine.handle_patty(machine.patties[0].name)
@@ -125,7 +124,7 @@ def test_max_toppings(machine):
 def test_cost_calculation(machine):
     # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
     # This functions checks if the total cost returend by the calculate_cost is correct. 
-    # it is checking for all scenarios like cup, toppings and flavour. 
+    # it is checking for all scenarios like bun, patties and flavour using random module. 
     for i in range(4):
         expected_cost = 0
         machine.reset()
