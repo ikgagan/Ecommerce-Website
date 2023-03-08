@@ -156,8 +156,8 @@ def test_total_sales(third_order):
 
 def test_total_burgers(third_order):
     # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-    # this function is for total_icecream 
-    # to check if the total_icecream  is increased properly
+    # this function is for total_burgers 
+    # to check if the total_burgers  is increased properly
     # we are testing this function using fixtures 
     assert third_order.total_burgers == 3
 
