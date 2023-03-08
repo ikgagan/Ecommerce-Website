@@ -95,7 +95,7 @@ def test_toppings_instock(machine):
 def test_max_patties(machine):
     try:
         # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-        # This test case checks if the exception is raised when the user chooses more the 3 patties is choosen.
+        # This test case checks if the exception is raised when the user chooses more the 3 patties.
         machine.reset()
         machine.handle_bun("no bun")
         machine.handle_patty(machine.patties[0].name)
@@ -110,7 +110,7 @@ def test_max_patties(machine):
 def test_max_toppings(machine):
     try:
         # Gagan Indukala Krishna Murthy - gi36 - 2nd March 2023
-        # This test case checks if the exception is raised when the user chooses more the 3 toppings is choosen.
+        # This test case checks if the exception is raised when the user chooses more the 3 toppings.
         machine.handle_bun("White Burger Bun")
         machine.handle_patty("next")
         machine.handle_toppings(machine.toppings[0].name)
