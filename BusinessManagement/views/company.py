@@ -8,9 +8,13 @@ def search():
     # DO NOT DELETE PROVIDED COMMENTS
     # TODO search-1 retrieve id, name, address, city, country, state, zip, website, employee count as employees for the company
     # don't do SELECT *
-    
-    query = "... WHERE 1=1"
-    args = {} # <--- add values to replace %s/%(named)s placeholders
+    # Gagan Indukala Krishna Murthy - gi36 - 5th April 
+    query = """SELECT id, name, address, city, country, state, zip, website,
+            (SELECT count(*) from IS601_MP3_Employees A
+            WHERE A.company_id = B.id) AS employees
+            FROM IS601_MP3_Companies B
+            WHERE 1=1"""
+    args = [] # <--- add values to replace %s/%(named)s placeholders
     allowed_columns = ["name", "city", "country", "state"]
     # TODO search-2 get name, country, state, column, order, limit request args
     # TODO search-3 append a LIKE filter for name if provided
@@ -19,26 +23,47 @@ def search():
     # TODO search-6 append sorting if column and order are provided and within the allows columsn and allowed order asc,desc
     # TODO search-7 append limit (default 10) or limit greater than 1 and less than or equal to 100
     # TODO search-8 provide a proper error message if limit isn't a number or if it's out of bounds
-    
-
-    limit = 10 # TODO change this per the above requirements
-    query += " LIMIT %(limit)s"
-    args["limit"] = limit
+    # Gagan Indukala Krishna Murthy - gi36 - 5th April 
+    filters = ["country", "state"]
+    if request.args.get("name"):
+        query += " and name like %s"
+        args.append(f"%{request.args.get('name')}%")
+    for filter in filters:
+        if request.args.get(filter):
+            query += f" and {filter} = %s"
+            args.append(request.args.get(filter))
+    if request.args.get("order") and request.args.get("column"):
+        if request.args.get("column") in allowed_columns \
+            and request.args.get("order") in ["asc", "desc"]:
+            query += f" ORDER BY {request.args.get('column')} {request.args.get('order')}"
+    # TODO change this per the above requirements
+    # Gagan Indukala Krishna Murthy - gi36 - 5th April 
+    query += " LIMIT %s"
+    ql = int(request.args.get('limit', 10))
+    if ql < 1 or ql > 100:
+        flash("limit value should be in the range of 1-100; Defaulting to 10")
+        args.append(10)
+    else:
+        args.append(ql)
     print("query",query)
     print("args", args)
     try:
-        result = DB.selectAll(query, args)
-        #print(f"result {result.rows}")
+        result = DB.selectAll(query, *args)
+        print("1")
+        print(f"result {result.rows}")
+        print(f"errorrrrrrrrrrrrr{result.status}")
         if result.status:
             rows = result.rows
             print(f"rows {rows}")
     except Exception as e:
+        print(f"check error{e}")
         # TODO search-9 make message user friendly
-        flash(str(e), "danger")
+        # Gagan Indukala Krishna Murthy - gi36 - 5th April 
+        flash(f"Error occurred while trying to search company: {e}", "danger")
     # hint: use allowed_columns in template to generate sort dropdown
     # hint2: convert allowed_columns into a list of tuples representing (value, label)
     # do this prior to passing to render_template, but not before otherwise it can break validation
-    
+    allowed_columns = [(col,col) for col in allowed_columns]
     return render_template("list_companies.html", rows=rows, allowed_columns=allowed_columns)
 
 @company.route("/add", methods=["GET","POST"])
