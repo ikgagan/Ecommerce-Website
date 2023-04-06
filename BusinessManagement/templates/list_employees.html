@@ -3,6 +3,7 @@
 {% block content %}
 {% from "company_dropdown.html" import company_dropdown %}
 {% from "sort_filter.html" import sort_filter %}
+{# Gagan Indukala Krishna Murthy - gi36 - 5th April #}
 <div class="container-fluid">
     <div class="h1 text-center">{{request.args.get("company_name","")}} Employee Directory</div>
     <form method="GET">
@@ -16,13 +17,28 @@
         limit (default 10)
         ensure all fields prefill with request arg data if provided
         #}
-
+        {# Gagan Indukala Krishna Murthy - gi36 - 6th April #}
         <div class="row">
+            <div class="col">
+                <label class="visually-hidden" for="fn">First Name</label>
+                <input type="text" name="fn" class="form-control" id="fn" placeholder="First Name"
+                value="{{request.args.get('fn') or ''}}">
+            </div>
+            <div class="col">
+                <label class="visually-hidden" for="ln">Last Name</label>
+                <input type="text" name="ln" class="form-control" id="ln" placeholder="Last Name"
+                value="{{request.args.get('ln') or ''}}">
+            </div>
+            <div class="col">
+                <label class="visually-hidden" for="email">Email</label>
+                <input type="text" name="email" class="form-control" id="email" placeholder="Mail"
+                value="{{request.args.get('email') or ''}}">
+            </div>
             <div class="col">
                 <label class="visually-hidden" for="company">Company</label>
                 {{company_dropdown(request.args.get("company"))}}
             </div>
-            {{sort_filter(cols=[...])}}
+            {{sort_filter(cols=allowed_columns)}}
             <div class="col">
                 <input type="submit" class="btn btn-primary" value="Filter" />
             </div>
@@ -37,7 +53,10 @@
             <tr class="text-capitalize">
                 {# generate th tags for each column to display #}
                 {# IMPORTANT use table column names as the headings, replace _ with space via filter #}
-
+                {# Gagan Indukala Krishna Murthy - gi36 - 5th April #}
+                {% for r in rows[0] %}
+                <th>{{r | replace('_', ' ')}}</th>
+                {% endfor %}
                 <th>Actions</th>
             </tr>
         </thead>
@@ -47,7 +66,18 @@
             an edit button that passes the employee id to employee edit
             a delete button that passes the employee id and the request args to the employee delete route
             #}
-
+            {# Gagan Indukala Krishna Murthy - gi36 - 5th April #}
+            {% for r in rows %}
+            <tr>   
+                {% for k,v in r.items() %}
+                <td>{{v}}</td>
+                {% endfor %}
+                <td>
+                    <a href="{{url_for('employee.edit', id=r.get('id'))}}" class="btn btn-secondary btn-sm">Edit</a>
+                    <a href="{{url_for('employee.delete', id=r.get('id'), **request.args)}}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr> 
+            {% endfor %}
         </tbody>
         {% else %}
         <tbody>

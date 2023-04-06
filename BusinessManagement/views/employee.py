@@ -1,17 +1,22 @@
 from flask import Blueprint, redirect, render_template, request, flash, url_for
 from sql.db import DB
 employee = Blueprint('employee', __name__, url_prefix='/employee')
-
+# Gagan Indukala Krishna Murthy - gi36 - April 6th
 
 @employee.route("/search", methods=["GET"])
 def search():
     rows = []
     # DO NOT DELETE PROVIDED COMMENTS
     # TODO search-1 retrieve employee id as id, first_name, last_name, email, company_id, company_name using a LEFT JOIN
-    query = """SELECT ...
-     FROM ... LEFT JOIN ... WHERE 1=1"""
-    args = {} # <--- add values to replace %s/%(named)s placeholders
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th
+    query = """ SELECT A.id, first_name, last_name, email, company_id, 
+                IF(name is not null, name,'N/A') as company_name 
+                FROM IS601_MP3_Employees A
+                LEFT JOIN IS601_MP3_Companies B on A.company_id=B.id
+                WHERE 1=1"""
+    args = [] # <--- add values to replace %s/%(named)s placeholders
     allowed_columns = ["first_name", "last_name", "email", "company_name"]
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th
     # TODO search-2 get fn, ln, email, company, column, order, limit from request args
     # TODO search-3 append like filter for first_name if provided
     # TODO search-4 append like filter for last_name if provided
@@ -20,26 +25,46 @@ def search():
     # TODO search-7 append sorting if column and order are provided and within the allowed columns and order options (asc, desc)
     # TODO search-8 append limit (default 10) or limit greater than 1 and less than or equal to 100
     # TODO search-9 provide a proper error message if limit isn't a number or if it's out of bounds
-
-    limit = 10 # TODO change this per the above requirements
-    query += " LIMIT %(limit)s"
-    args["limit"] = limit
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th
+    filters = [("fn", "first_name"), ("ln", "last_name"), ("email", "email")]
+    for filter_arg,filter in filters:
+        if request.args.get(filter_arg):
+            query += f" and {filter} like %s"
+            args.append(f"%{request.args.get(filter_arg)}%")
+    if request.args.get("company"):
+        query += f" and company_id = %s"
+        args.append(request.args.get('company'))
+    if request.args.get("order") and request.args.get("column"):
+        if request.args.get("column") in allowed_columns \
+            and request.args.get("order") in ["asc", "desc"]:
+            query += f" ORDER BY {request.args.get('column')} {request.args.get('order')}"
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th
+    query += f" LIMIT %s"
+    ql = int(request.args.get('limit', 10))
+    if ql < 1 or ql > 100:
+        flash("limit value should be in the range of 1-100; Defaulting to 10")
+        args.append(10)
+    else:
+        args.append(ql)
     print("query",query)
     print("args", args)
     try:
-        result = DB.selectAll(query, args)
+        result = DB.selectAll(query, *args)
         if result.status:
             rows = result.rows
     except Exception as e:
         # TODO search-10 make message user friendly
-        flash(e, "error")
+        # Gagan Indukala Krishna Murthy - gi36 - April 6th
+        flash(f"Unexpected error while trying to search employee: {e}", "danger")
     # hint: use allowed_columns in template to generate sort dropdown
     # hint2: convert allowed_columns into a list of tuples representing (value, label)
     # do this prior to passing to render_template, but not before otherwise it can break validation
-   
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th
+    allowed_columns = [(col,col) for col in allowed_columns]
     return render_template("list_employees.html", rows=rows, allowed_columns=allowed_columns)
 
 @employee.route("/add", methods=["GET","POST"])
+# Gagan Indukala Krishna Murthy - gi36 - April 6th
 def add():
     if request.method == "POST":
         # TODO add-1 retrieve form data for first_name, last_name, company, email
@@ -48,6 +73,7 @@ def add():
         # TODO add-4 company (may be None)
         # TODO add-5 email is required (flash proper error message)
         # TODO add-5a verify email is in the correct format
+        # Gagan Indukala Krishna Murthy - gi36 - April 6th
         has_error = False # use this to control whether or not an insert occurs
             
         if not has_error:
@@ -64,8 +90,10 @@ def add():
     return render_template("add_employee.html")
 
 @employee.route("/edit", methods=["GET", "POST"])
+# Gagan Indukala Krishna Murthy - gi36 - April 6th
 def edit():
     # TODO edit-1 request args id is required (flash proper error message)
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th
     id = False
     if not id: # TODO update this for TODO edit-1
         pass
@@ -100,8 +128,8 @@ def edit():
             result = DB.selectOne("""SELECT 
             ...
             FROM ... LEFT JOIN ... 
-              
-              WHERE ..."""
+            
+            WHERE ..."""
             , id)
             if result.status:
                 row = result.row
@@ -118,4 +146,22 @@ def delete():
     # TODO delete-3 pass all argument except id to this route
     # TODO delete-4 ensure a flash message shows for successful delete
     # TODO delete-5 if id is missing, flash necessary message and redirect to search
-    pass
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th
+    if request.method == "GET":
+        emp_id = request.args.get("id")
+        if not emp_id:
+            flash("Employee ID is missing", "danger")
+            return render_template("list_employees.html")
+        try:
+            result = DB.delete("""
+            DELETE FROM IS601_MP3_Employees
+            WHERE id = %s
+            """, emp_id)
+            if result.status:
+                flash("Successfully deleted employee", "success")
+        except Exception as e:
+            flash(f"Unexpected error while trying to delete the employee: {e}", "danger")
+        new_args = dict(request.args)
+        del new_args["id"]
+    return redirect(url_for("employee.search", **new_args))
+    # Gagan Indukala Krishna Murthy - gi36 - April 6th

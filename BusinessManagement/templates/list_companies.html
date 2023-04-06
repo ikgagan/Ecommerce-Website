@@ -13,6 +13,7 @@
     limit (default 10)
     ensure all fields prefill with request arg data if provided
     #}
+    {# Gagan Indukala Krishna Murthy - gi36 - 5th April #}
     <form method="GET">
         <div class="row">
             <div class="col">
@@ -40,6 +41,7 @@
                 <tr class="text-capitalize">
                     {# generate th tags for each column to display #}
                     {# IMPORTANT use table column names as the headings, replace _ with space via filter #}
+                    {# Gagan Indukala Krishna Murthy - gi36 - 5th April #}
                     {% for r in rows[0] %}
                     <th>{{r | replace('_', ' ')}}</th>
                     {% endfor %}
@@ -56,6 +58,7 @@
                 an edit button that passes the company id to company edit
                 a delete button that passes the company id and the request args to the company delete route
                 #}
+                {# Gagan Indukala Krishna Murthy - gi36 - 5th April #}
                 {% for r in rows %}
             <tr>   
                 {% for k,v in r.items() %}

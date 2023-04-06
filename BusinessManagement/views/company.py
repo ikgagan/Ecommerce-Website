@@ -38,7 +38,7 @@ def search():
             query += f" ORDER BY {request.args.get('column')} {request.args.get('order')}"
     # TODO change this per the above requirements
     # Gagan Indukala Krishna Murthy - gi36 - 5th April 
-    query += " LIMIT %s"
+    query += f" LIMIT %s"
     ql = int(request.args.get('limit', 10))
     if ql < 1 or ql > 100:
         flash("limit value should be in the range of 1-100; Defaulting to 10")
@@ -166,5 +166,31 @@ def delete():
     # TODO delete-4 ensure a flash message shows for successful delete
     # TODO delete-5 for all employees assigned to this company set their company_id to None/null
     # TODO delete-6 if id is missing, flash necessary message and redirect to search
-    pass
+    # Ggagan Indukala Krishna Murthy - gi36- April 6th
+    if request.method == "GET":
+        cmp_id = request.args.get("id")
+        if not cmp_id:
+            flash("Company ID is missing", "danger")
+            return render_template("list_companies.html", **request.args)
+        try:
+            constraint_fix = DB.update("""
+            UPDATE IS601_MP3_Employees
+            SET company_id = NULL
+            WHERE company_id = %s
+            """,cmp_id)
+
+            result = DB.delete("""
+            DELETE FROM IS601_MP3_Companies
+            WHERE id = %s
+            """, cmp_id)
+
+            if constraint_fix.status and result.status:
+                flash("Successfully deleted company", "success")
+        except Exception as e:
+            flash(f"Unexpected error while trying to delete the Company: {e}", "danger")
+            return render_template("list_companies.html", **request.args)
+        new_args = dict(request.args)
+        del new_args["id"]
+    return redirect(url_for('company.search', **new_args))
+    # Ggagan Indukala Krishna Murthy - gi36- April 6th
     
