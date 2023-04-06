@@ -16,7 +16,7 @@
                         Company
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="company/search">Search</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('company.search')}}">Search</a></li>
                         <li><a class="dropdown-item" href="#">Add</a></li>
 
                     </ul>
@@ -39,7 +39,7 @@
                         Admin
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Import</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('admin.importCSV')}}">Import</a></li>
                     </ul>
                 </li>
             </ul>
