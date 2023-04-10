@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Add Employee{% endblock %}
+{% block content %}
+{% from "company_dropdown.html" import company_dropdown %}
+<div class="container-fluid">
+    <div class="h1">Add Employee</div>
+    <div>
+        <form method="POST">
+            {#
+            generate fields with proper types for
+            first_name (required)
+            last_name (required)
+            email (required)
+            if a validation error occurs, the inserted form data should persist
+            #}
+            {# Gagan Indukala Krishna Murthy - gi36 - 8th April #}
+
+            <label class="form-label" for="first_name">First Name</label>
+            <input type="text" name="first_name" class="form-control" id="first_name" placeholder="First Name" value="{{input.get('first_name') or ''}}" required>
+                <br>
+            <label class="form-label" for="last_name">Last Name</label>
+            <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Last Name" value="{{input.get('last_name') or ''}}" required>
+                <br>  
+            <label class="form-label" for="email">Email</label>
+            <input type="email" name="email" class="form-control" id="email" placeholder="Email" value="{{input.get('email') or ''}}" required>
+                <br> 
+            {# use the below for company selection #}
+            <label class="form-label" for="company">Company</label>
+            {{ company_dropdown(input.get('company')) }}
+            <input type="submit" class="btn btn-primary" value="Save Employee" />
+        </form>
+    </div>
+</div>
+{% endblock %}
