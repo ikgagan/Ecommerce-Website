@@ -4,6 +4,7 @@ employee = Blueprint('employee', __name__, url_prefix='/employee')
 # Gagan Indukala Krishna Murthy - gi36 - April 6th
 
 @employee.route("/search", methods=["GET"])
+# Function for searching and listing employees
 def search():
     rows = []
     # DO NOT DELETE PROVIDED COMMENTS
@@ -65,7 +66,9 @@ def search():
 
 @employee.route("/add", methods=["GET","POST"])
 # Gagan Indukala Krishna Murthy - gi36 - April 6th
+# Function for adding employees 
 def add():
+    input = request.form
     if request.method == "POST":
         # TODO add-1 retrieve form data for first_name, last_name, company, email
         # TODO add-2 first_name is required (flash proper error message)
@@ -73,30 +76,46 @@ def add():
         # TODO add-4 company (may be None)
         # TODO add-5 email is required (flash proper error message)
         # TODO add-5a verify email is in the correct format
-        # Gagan Indukala Krishna Murthy - gi36 - April 6th
+        # Gagan Indukala Krishna Murthy - gi36 - April 9th
+        form_value = {}
         has_error = False # use this to control whether or not an insert occurs
-            
+
+        form_value["first_name"] = input.getlist("first_name")
+        form_value["last_name"] = input.getlist("last_name")
+        form_value["company"] = request.form.get("company") or None
+        form_value["email"] = input.getlist("email")
+
+        for k,v in form_value.items():
+            if k != "company" and not v:
+                flash(f"{k} is a mandatory field", "danger")
+                has_error = True
+            # elif k == "company" and not v:
+            #     form_value[k] = None
+
         if not has_error:
             try:
                 result = DB.insertOne("""
-                INSERT INTO ...
-                """, ...
+                INSERT INTO IS601_MP3_Employees (first_name, last_name, company_id, email)
+                VALUES (%s, %s, %s, %s)
+                """, *form_value.values()
                 ) # <-- TODO add-6 add query and add arguments
                 if result.status:
-                    flash("Created Employee Record", "success")
+                    flash("Created Employee Record successfully", "success")
             except Exception as e:
                 # TODO add-7 make message user friendly
-                flash(str(e), "danger")
-    return render_template("add_employee.html")
+                flash(f"Unexpected error while trying to search employee: {e}", "danger")
+    return render_template("add_employee.html", input=input)
 
 @employee.route("/edit", methods=["GET", "POST"])
 # Gagan Indukala Krishna Murthy - gi36 - April 6th
+# Function for editing employees 
 def edit():
     # TODO edit-1 request args id is required (flash proper error message)
     # Gagan Indukala Krishna Murthy - gi36 - April 6th
-    id = False
+    input = request.form
+    id = request.args.get("id")
     if not id: # TODO update this for TODO edit-1
-        pass
+        flash("Company ID is not available ", "danger")
     else:
         if request.method == "POST":
             
@@ -106,41 +125,57 @@ def edit():
             # TODO edit-4 company (may be None)
             # TODO edit-5 email is required (flash proper error message)
             # TODO edit-5a verify email is in the correct format
+            # Gagan Indukala Krishna Murthy - gi36 - April 10th
+            form_value={}
             has_error = False # use this to control whether or not an insert occurs
-
             
-                
+            form_value["first_name"] = input.get('first_name')
+            form_value["last_name"] = input.get('last_name')
+            form_value["company"] = request.form.get("company") or None
+            form_value["email"] = input.get('email')
+            form_value["id"] = id
+
+            for k,v in form_value.items():
+                if k != "company" and not v:
+                    flash(f"{k} is a mandatory field", "danger")
+                    has_error = True
+            
             if not has_error:
                 try:
                     # TODO edit-6 fill in proper update query
+                    # Gagan Indukala Krishna Murthy - gi36 - April 10th
                     result = DB.update("""
-                    UPDATE ... SET
-                    ...
-                    """, ...)
+                    UPDATE IS601_MP3_Employees 
+                    SET first_name=%s, last_name=%s, company_id=%s, email=%s
+                    WHERE id=%s
+                    """, *form_value.values())
                     if result.status:
                         flash("Updated record", "success")
                 except Exception as e:
                     # TODO edit-7 make this user-friendly
-                    flash(e, "danger")
+                    # Gagan Indukala Krishna Murthy - gi36 - April 10th
+                    flash(f"Unexpected error while trying to search employee: {e}", "danger")
         row = {}
         try:
             # TODO edit-8 fetch the updated data 
-            result = DB.selectOne("""SELECT 
-            ...
-            FROM ... LEFT JOIN ... 
-            
-            WHERE ..."""
-            , id)
+            # Gagan Indukala Krishna Murthy - gi36 - April 10th
+            result = DB.selectOne("""
+            SELECT * FROM IS601_MP3_Employees A
+            LEFT JOIN IS601_MP3_Companies B on A.company_id=B.id
+            WHERE A.id = %s
+            """, id)
             if result.status:
                 row = result.row
         except Exception as e:
             # TODO edit-9 make this user-friendly
-            flash(str(e), "danger")
+            # Gagan Indukala Krishna Murthy - gi36 - April 10th
+            flash(f"Unexpected error while trying to search employee: {e}", "danger")
     # TODO edit-10 pass the employee data to the render template
-    return render_template("edit_employee.html", ...)
+    return render_template("edit_employee.html", row=row, company=row.get("company_id"))
 
 @employee.route("/delete", methods=["GET"])
 def delete():
+    # Function for deleting employees 
     # TODO delete-1 delete employee by id
     # TODO delete-2 redirect to employee search
     # TODO delete-3 pass all argument except id to this route
