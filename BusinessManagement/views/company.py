@@ -96,6 +96,7 @@ def add():
         form_value["zip_code"] = input.getlist('zip')
         form_value["website"] = input.getlist('website')
 
+        # Gagan Indukala Krishna Murthu - gi36- April 9th
         for k,v in form_value.items():
             if k != "website" and not v:
                 flash(f"{k} is a mandatory field", "danger")

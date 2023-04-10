@@ -56,6 +56,7 @@ def search():
     except Exception as e:
         # TODO search-10 make message user friendly
         # Gagan Indukala Krishna Murthy - gi36 - April 6th
+        print(e)
         flash(f"Unexpected error while trying to search employee: {e}", "danger")
     # hint: use allowed_columns in template to generate sort dropdown
     # hint2: convert allowed_columns into a list of tuples representing (value, label)
@@ -116,6 +117,7 @@ def edit():
     id = request.args.get("id")
     if not id: # TODO update this for TODO edit-1
         flash("Company ID is not available ", "danger")
+        redirect('/employee/search')
     else:
         if request.method == "POST":
             
@@ -154,6 +156,7 @@ def edit():
                 except Exception as e:
                     # TODO edit-7 make this user-friendly
                     # Gagan Indukala Krishna Murthy - gi36 - April 10th
+                    print(e)
                     flash(f"Unexpected error while trying to search employee: {e}", "danger")
         row = {}
         try:
@@ -169,6 +172,7 @@ def edit():
         except Exception as e:
             # TODO edit-9 make this user-friendly
             # Gagan Indukala Krishna Murthy - gi36 - April 10th
+            print(e)
             flash(f"Unexpected error while trying to search employee: {e}", "danger")
     # TODO edit-10 pass the employee data to the render template
     return render_template("edit_employee.html", row=row, company=row.get("company_id"))
