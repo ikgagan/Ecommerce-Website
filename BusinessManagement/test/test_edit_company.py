@@ -43,6 +43,7 @@ def test_edit_company(client):
         "city": "Testville",
         "zip":"00000"
     }, follow_redirects=True )
+    # print(resp.data)
     assert resp.status_code == 200
     resp = client.get("/company/edit?id=-1", follow_redirects=True )
     # print(resp.data)
@@ -50,7 +51,7 @@ def test_edit_company(client):
     soup = BeautifulSoup(resp.data, "html.parser")
     form = soup.form
     ele = form.select("[name='city']")[0]
-    print(ele)
+    # print(ele)
     # TODO the dropdown option doesn't need to exist, it just needs to
     # be set on the select element so this is fine
     assert ele.get("value") == 'Testville'
