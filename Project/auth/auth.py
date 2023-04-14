@@ -150,6 +150,7 @@ def profile():
                             flash(ue, "danger")
                     else:
                         flash("Invalid password","danger")
+                        return render_template("profile.html", form=form)
             except Exception as se:
                 flash(se, "danger")
         
@@ -160,10 +161,10 @@ def profile():
                     flash("Saved profile", "success")
             except Exception as e:
                 r = re.match(".*IS601_Users.(\w+)", str(e))
-            if r:
-                flash(f"The chosen {r.group(1   )} is not available", "warning")
-            else:
-                flash("Unknown error occurred, please try again", "danger")
+                if r:
+                    flash(f"The chosen {r.group(1   )} is not available", "warning")
+                else:
+                    flash("Unknown error occurred, please try again", "danger")
     try:
         # get latest info if anything changed
         result = DB.selectOne("SELECT id, email, username FROM IS601_Users where id = %s", user_id)
