@@ -1,6 +1,6 @@
 <table><tr><td> <em>Assignment: </em> IS601 Milestone1 Deliverable</td></tr>
 <tr><td> <em>Student: </em> Gagan Indukala Krishna Murthy (gi36)</td></tr>
-<tr><td> <em>Generated: </em> 4/14/2023 4:39:31 AM</td></tr>
+<tr><td> <em>Generated: </em> 4/15/2023 8:27:56 PM</td></tr>
 <tr><td> <em>Grading Link: </em> <a rel="noreferrer noopener" href="https://learn.ethereallab.app/homework/IS601-006-S23/is601-milestone1-deliverable/grade/gi36" target="_blank">Grading</a></td></tr></table>
 <table><tr><td> <em>Instructions: </em> <ol><li>Checkout Milestone1 branch</li><li>Create a milestone1.md file in your Project folder</li><li>Git add/commit/push this empty file to Milestone1 (you'll need the link later)</li><li>Ensure your images display correctly in the sample markdown at the bottom</li><ol><li>NOTE: You may want to try to capture as much checklist evidence in your screenshots as possible, you do not need individual screenshots and are recommended to combine things when possible. Also, some screenshots may be reused if applicable.</li></ol><li>Save the submission items</li><li>Copy/paste the markdown from the "Copy markdown to clipboard link" or via the download button</li><li>Paste the code into the milestone1.md file or overwrite the file</li><li>Git add/commit/push the md file to Milestone1</li><li>Double check the images load when viewing the markdown file (points will be lost for invalid/non-loading images)</li><li>Make a pull request from Milestone1 to dev and merge it (resolve any conflicts)<ol><li>Make sure everything looks ok on heroku dev</li></ol></li><li>Make a pull request from dev to prod (resolve any conflicts)<ol><li>Make sure everything looks ok on heroku prod</li></ol></li><li>Submit the direct link from github prod branch to the milestone1.md file (no other links will be accepted and will result in 0)</li></ol></td></tr></table>
 <table><tr><td> <em>Deliverable 1: </em> Feature: User will be able to register a new account </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
@@ -148,7 +148,7 @@
 <tr><td> <em>Sub-Task 3: </em> Explain briefly how the process/code works (view only)</td></tr>
 <tr><td> <em>Response:</em> <p>at the beginning of the session the formdata is fetched from the database<br>and it is displayed to the email and username forms for the particular<br>user.&nbsp;<br><br></p><br></td></tr>
 </table></td></tr>
-<table><tr><td> <em>Deliverable 8: </em> Feature: User will be able to edit their profile </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707834-bf5a5b13-ec36-4597-9741-aa830c195be2.png"></td></tr>
+<table><tr><td> <em>Deliverable 8: </em> Feature: User will be able to edit their profile </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
 <tr><td><table><tr><td> <em>Sub-Task 1: </em> Add screenshots of the User Profile page validation messages and success messages</td></tr>
 <tr><td><table><tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/231970676-997fce83-6e15-4211-ab9c-81a2d589d8d5.png"/></td></tr>
 <tr><td> <em>Caption:</em> <p>username validation<br></p>
@@ -165,10 +165,20 @@
 <tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/231986436-f87e2984-8df3-4b3c-9fbf-ab8c72f4c4d5.png"/></td></tr>
 <tr><td> <em>Caption:</em> <p>invalid password validation<br></p>
 </td></tr>
+<tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/232258324-e991ee01-9e5d-4577-86ab-7e4090780ef9.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>Success flash message after user profile is edited<br></p>
+</td></tr>
+<tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/232259751-f8a76e78-563a-47bd-a1e4-887e70028619.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>Password not match validation<br></p>
+</td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 2: </em> Add before and after screenshots of the Users table when a user edits their profile</td></tr>
-<tr><td><table><tr><td>Missing Image</td></tr>
-<tr><td> <em>Caption:</em> (missing)</td></tr>
+<tr><td><table><tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/232258322-11b49dbd-c1ca-4f9c-8738-3a55fa89c66f.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>before the user profile is edited - database<br></p>
+</td></tr>
+<tr><td><img width="768px" src="https://user-images.githubusercontent.com/123420429/232258325-9d6d1c6a-f44e-47d9-8bcd-23e2a293560f.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>after the user profile is edited - database<br></p>
+</td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 3: </em> Add the related pull request(s) for this feature</td></tr>
 <tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/ikgagan/IS601/pull/39">https://github.com/ikgagan/IS601/pull/39</a> </td></tr>
@@ -177,7 +187,7 @@
 </table></td></tr>
 <table><tr><td> <em>Deliverable 9: </em> Misc </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
 <tr><td><table><tr><td> <em>Sub-Task 1: </em> Describe any issues and learnings throughout this milestone</td></tr>
-<tr><td> <em>Response:</em> <p><span style="letter-spacing: 0.09996px;"><b>No issues<br><br>Learnings</b> - learnt about auth process - profile management -<br>user sessions - role managements(ie admin)<br><b>Resources </b>- Class modules and videos from the<br>professor.&nbsp;<br><br><br><b>Login Credentials</b>&nbsp;<br>Username: gagan<br>password: 123123123</span><br></p><br></td></tr>
+<tr><td> <em>Response:</em> <p><span style="letter-spacing: 0.09996px;"><b>No issues<br><br>Learnings</b> - learnt about auth process - profile management -<br>user sessions - role managements(ie admin)<br><b>Resources </b>- Class modules and videos from the<br>professor.&nbsp;<br></span><br></p><br></td></tr>
 <tr><td> <em>Sub-Task 2: </em> Prod Application Link to Login Page</td></tr>
 <tr><td> <a rel="noreferrer noopener" target="_blank" href="https://is601-gi36-prod.herokuapp.com/login">https://is601-gi36-prod.herokuapp.com/login</a> </td></tr>
 </table></td></tr>
