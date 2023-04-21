@@ -3,7 +3,11 @@
 {% block content %}
 {#Gagan Inudkala Krishna Murthy - gi36 - 20th april#}
 <div class="container-fluid">
-    <div class="h4">Cart</div>
+    {% set itemTotal = namespace(total=0) %}
+    {% for row in rows %}
+    {% set itemTotal.total = itemTotal.total + row['quantity'] %}
+    {% endfor %}
+    <div class="h4">Cart: {{itemTotal.total}} Items</div>
     <table class="table table-striped table-bordered">
         <thread>
             <tr>

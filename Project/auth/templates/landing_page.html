@@ -2,11 +2,13 @@
 {% block title %}Landing Page{% endblock %}
 {% block content %}
 <div class="container-fluid" style="text-align:center">
+    <br>
     <div class="h3">Welcome</div>
     <div style = "text-transform:capitalize;">
     {{current_user.username}}
 </div>
 </div>
+<br>
 {% if current_user.username == "gagan" %}
 <div>
     <img src="https://user-images.githubusercontent.com/123420429/231655084-6904430a-7564-4f9c-872d-1c69dcce68cf.jpeg" alt="Profile Photo" 

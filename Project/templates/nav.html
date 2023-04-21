@@ -44,11 +44,17 @@
                     ] %}
                     {{dropdown_nav("Admin", admin)}}
                 {% endif %}
+            </ul>
+                <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('shop.cart')}}" style="color:white">Cart</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('auth.logout')}}" style="color:white">Logout</a>
                 </li>
-                {% endif %}
             </ul>
+                {% endif %}
+            
         </div>
     </div>
 </nav>
