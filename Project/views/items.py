@@ -47,15 +47,15 @@ def shop_list():
 def shop_item():
         # Gagan Indukala Krishna Murthy - gi36 - 20th April
     try:
-        id = request.args.get("id" or None)
+        id = request.form.get("id") or request.args.get("id") or None
         result = DB.selectOne("SELECT id, name, description, stock, unit_price, image FROM IS601_S_Items WHERE id = %s", id)
         if result.status and result.row:
             rows = result.row
     except Exception as e:
         print("Error fetching item", e)
         flash("Item not found", "danger")
-    rows = {}
-    return render_template("view_item.html", rows=rows)
+        rows = []
+    return render_template("view_item.html", rows=rows if rows else {})
 
     # Gagan Indukala Krishna Murthy - gi36 - 20th April
 @shop.route("/cart", methods=["GET","POST"])
