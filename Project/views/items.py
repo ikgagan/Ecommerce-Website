@@ -140,3 +140,134 @@ def cart():
         flash("Error fetching cart", "danger")
     return render_template("cart.html", rows=rows)   
 # Gagan Indukala Krishna Murthy - gi36 - 20th April
+
+@shop.route("/confirm_order", methods=["GET","POST"])
+@login_required
+def confirm_order():
+# Gagan Indukala Krishna Murthy - gi36 - 20th April
+    cart = []
+    total = 0
+    try:
+        result = DB.selectAll("""SELECT c.id, item_id, name, c.quantity, i.stock, c.unit_price as cart_cost, i.unit_price as item_cost, (c.quantity * c.unit_price) as subtotal 
+        FROM IS601_S_Cart c JOIN IS601_S_Items i on c.item_id = i.id
+        WHERE c.user_id = %s
+        """, current_user.get_id())
+        if result.status and result.rows:
+            cart = result.rows
+        has_error = False
+        for item in cart:
+            if item["quantity"] > item["stock"]:
+                flash(f"Item {item['name']} doesn't have enough stock left", "warning")
+                has_error = True
+                if item["stock"] == 0:
+                    result = DB.delete("DELETE FROM IS601_S_Cart where item_id = %s and user_id = %s", item["item_id"], current_user.get_id())
+                    flash(f"Deleting item: {item['name']} from your cart", "warning")
+                else:
+                    result = DB.insertOne("""
+                            UPDATE IS601_S_Cart SET
+                            quantity = %(quantity)s,
+                            WHERE item_id = %(id)s and user_id = %(user_id)s
+                            """,{
+                                "id":id,
+                                "quantity": item["stock"],
+                                "item_id":item["item_id"],
+                                "user_id":item['user_id']
+                            })
+                    if result.status:
+                        flash(f"Updated quantity for {item['name']} to {item['stock']}", "warning")
+            if item["cart_cost"] != item["item_cost"]:
+                flash(f"Item {item['name']}'s price has changed, please refresh cart", "warning")
+                has_error = True
+                result = DB.insertOne("""
+                            UPDATE IS601_S_Cart SET
+                            unit_price = %(cost)s,
+                            WHERE item_id = %(id)s and user_id = %(user_id)s
+                            """,{
+                                "id":id,
+                                "cost": item["item_cost"],
+                                "item_id":item["item_id"],
+                                "user_id":item['user_id']
+                            })
+                if result.status:
+                    flash(f"Updated cost for {item['name']} to {item['item_cost']}")
+            total += float(item["subtotal"] or 0) 
+        if has_error:
+            return redirect(url_for("shop.cart"))
+    except Exception as e:
+        print("Transaction exception", e)
+        flash("Something went wrong", "danger")
+        tb.print_exc()
+        return redirect(url_for("shop.cart"))
+    return render_template("pending_order.html", rows=cart, total=total)
+
+@shop.route("/payment", methods=["POST"])
+@login_required
+# Gagan Indukala Krishna Murthy - gi36 - 27th April
+def payment():
+    missing = False
+    reqd_fields = ['fname', 'lname', 'address', 'payment']
+    form_data = {}
+    for field in reqd_fields:
+        if not request.form.get(field):
+            flash(f"Missing Required Field: {field}, Please Try again", "danger")
+            missing = True
+        else:
+            form_data[field] = request.form.get(field)
+    print(missing)
+    if missing:
+        return redirect(url_for("shop.confirm_order"))
+    return render_template("payment.html", form=form_data)
+
+@shop.route("/orders", methods=["GET"])
+@login_required
+# Gagan Indukala Krishna Murthy - gi36 - 27th April
+def orders():
+    rows = []
+    try:
+        result = DB.selectAll("""
+        SELECT id, total_price, number_of_items, created FROM IS601_S_Orders WHERE user_id = %s
+        """, current_user.get_id())
+        if result.status and result.rows:
+            rows = result.rows
+    except Exception as e:
+        print("Error getting orders", e)
+        flash("Error fetching orders", "danger")
+    return render_template("orders.html", rows=rows)
+
+@shop.route("/order", methods=["GET"])
+@login_required
+# Gagan Indukala Krishna Murthy - gi36 - 20th April
+def order():
+    rows = []
+    total = 0
+    id = request.args.get("id")
+    if not id:
+        flash("Invalid order", "danger")
+        return redirect(url_for("shop.orders"))
+    try:
+        result = DB.selectAll("""
+        SELECT name, oi.unit_price, oi.quantity, (oi.unit_price*oi.quantity) as subtotal 
+        FROM IS601_S_OrderItems oi 
+        JOIN IS601_S_Items i on oi.item_id = i.id 
+        WHERE order_id = %s ANd user_id = %s
+        """, id, current_user.get_id())
+        if result.status and result.rows:
+            rows = result.rows
+            total = sum(int(row["subtotal"]) for row in rows)
+        result = DB.selectAll("""
+        SELECT first_name, last_name, address, payment_method
+        FROM IS601_S_Orders where id=%s
+        """, id)
+        if result.status and result.rows:
+            order_info = result.rows
+    except Exception as e:
+        print("Error getting order", e)
+        flash("Error fetching order", "danger")
+        rows = []
+        total = None
+        order_info = []
+    print(rows)
+    print(order_info)
+    return render_template("order.html", rows=rows, total=total, order_info=order_info )
+
+# Gagan Indukala Krishna Murthy - gi36 - 20th April

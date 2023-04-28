@@ -1,7 +1,7 @@
 {% macro render_table(title,data, ignored = [], view =None, edit=None, delete=None) %}
 <div class="container-fluid">
     <div class="h1">{{title}}</div>
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered border-dark mb-3">
     <thead class="table-dark">
         {% if data and data|length > 0 %}
         <tr class="text-capitalize">
@@ -11,7 +11,7 @@
                 {% endif %}
             {% endfor %}
             {% if view or edit or delete %}
-            <th>Actions</th>
+            <th class="text-center">Actions</th>
             {% endif %}
         </tr>
         {%endif%}
@@ -43,7 +43,7 @@
             {% endif %}
             {% endfor %}
             {% if view or edit or delete %}
-            <td>
+            <td class="text-center">
                 {% if view and r["id"] %}
                 <form action="{{url_for(view)}}?id={{r['id']}}" method="POST" style="display:inline-block">
                     <input type="submit" value="View" class="btn btn-info"/>
