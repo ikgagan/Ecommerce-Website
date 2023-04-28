@@ -340,17 +340,19 @@ def orders():
         flash("Error fetching orders", "danger")
     return render_template("orders.html", rows=rows)
 
-@shop.route("/order", methods=["GET"])
+@shop.route("/order", methods=["GET", "POST"])
 @login_required
-# Gagan Indukala Krishna Murthy - gi36 - 20th April
 def order():
+    # Gagan Indukala Krishna Murthy - gi36 - 20th April
     rows = []
     total = 0
     id = request.args.get("id")
+    print(f"check working {id}")
     if not id:
         flash("Invalid order", "danger")
         return redirect(url_for("shop.orders"))
     try:
+        # locking query to order_id and user_id so the user can see only their orders
         result = DB.selectAll("""
         SELECT name, oi.unit_price, oi.quantity, (oi.unit_price*oi.quantity) as subtotal 
         FROM IS601_S_OrderItems oi 
