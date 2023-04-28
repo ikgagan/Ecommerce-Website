@@ -25,6 +25,9 @@
                     <a class="nav-link" href="{{url_for('auth.landing_page')}}" style="color:white">Home</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('shop.new_release')}}" style="color:white">New Release</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{url_for('shop.shop_list')}}" style="color:white">Shop</a>
                 </li>
                 <li class="nav-item">
@@ -40,12 +43,16 @@
                 {{dropdown_nav("Roles", roles)}}
                 {% set admin = [
                     ("admin.item", "Add Item"),
-                    ("admin.items", "List Items")
+                    ("admin.items", "List Items"),
+                    ("admin.orders", "View Orders")
                     ] %}
                     {{dropdown_nav("Admin", admin)}}
                 {% endif %}
             </ul>
                 <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('shop.orders')}}" style="color:white">Orders</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('shop.cart')}}" style="color:white">Cart</a>
                 </li>
