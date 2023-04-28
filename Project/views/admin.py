@@ -122,7 +122,7 @@ def orders():
         flash("Error fetching orders", "danger")
     return render_template("orders.html", rows=rows)
 
-@admin.route("/admin/order", methods=["GET"])
+@admin.route("/admin/order", methods=["GET","POST"])
 @admin_permission.require(http_exception=403)
 def order():
 # Gagan Indukala Krishna Murthy - gi36 - April 27th
