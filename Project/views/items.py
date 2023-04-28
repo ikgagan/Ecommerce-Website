@@ -12,11 +12,16 @@ shop = Blueprint('shop', __name__, url_prefix='/',template_folder='templates')
 def new_release():
     return render_template("new_release.html")
 
+def total_cart():
+    id = request.form.get("id")
+    print(f"check for user id what is printing {id} and {request.form.get('id')}")
+    result = DB.selectAll("SELECT quantity FROM IS601_S_Cart WHERE user_id = %s", id)
 
 # Gagan Indukala Krishna Murthy - gi36 - 20th April
 @shop.route("/shop", methods=["GET","POST"])
 @login_required
 def shop_list():
+    total_cart()
     # Gagan Indukala Krishna Murthy - gi36 - 20th April
     query = """SELECT id, name, description, stock, unit_price, image
                FROM IS601_S_Items WHERE visibility = 1"""
@@ -200,6 +205,107 @@ def confirm_order():
         return redirect(url_for("shop.cart"))
     return render_template("pending_order.html", rows=cart, total=total)
 
+@shop.route("/place_order", methods=["GET","POST"])
+@login_required
+def place_order():
+    # Gagan Indukala Krishna Murthy - gi36 - 27th April
+    total = float(request.form.get('total', 0))
+    total = f"{total:.2f}"
+    money_received = float(request.form.get("money_received", 0))
+    if money_received and f"{money_received:.2f}" == total:
+        flash("Payment received, proceeding to place order", "success")
+    elif money_received:
+        flash("Received payment is not equal to the total cost, aborting order", "danger")
+        flash("Any amount debited will be refunded in 3-4 business days", "warning")
+        return redirect(url_for("shop.cart"))
+    else:
+        flash("Payment Failed, Please try again")
+        return redirect(url_for("shop.cart"))
+    cart = []
+    total = 0
+    quantity = 0
+    order = {}
+    try:
+        DB.getDB().autocommit = False 
+
+        
+        result = DB.selectAll("""SELECT c.id, item_id, name, c.quantity, i.stock, c.unit_price as cart_cost, i.unit_price as item_cost, (c.quantity * c.unit_price) as subtotal 
+        FROM IS601_S_Cart c JOIN IS601_S_Items i on c.item_id = i.id
+        WHERE c.user_id = %s
+        """, current_user.get_id())
+        if result.status and result.rows:
+            cart = result.rows
+        has_error = False
+        for item in cart:
+            if item["quantity"] > item["stock"]:
+                flash(f"Item {item['name']} doesn't have enough stock left", "warning")
+                has_error = True
+            if item["cart_cost"] != item["item_cost"]:
+                flash(f"Item {item['name']}'s price has changed, please refresh cart", "warning")
+                has_error = True
+            total += int(item["subtotal"] or 0)
+            quantity += int(item["quantity"])
+        
+        order_id = -1
+        if not has_error:
+            result = DB.insertOne("""INSERT INTO IS601_S_Orders (first_name, last_name,
+                                total_price, number_of_items, user_id, address, payment_method,
+                                money_received)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""", request.form.get('fname'), request.form.get('lname'),
+                                    total, quantity, int(current_user.get_id()),
+                                    request.form.get('address'),request.form.get('payment'),
+                                    money_received)
+            if not result.status:
+                flash("Error generating order", "danger")
+                DB.getDB().rollback()
+                has_error = True
+            else:
+                order_id = int(DB.db.fetch_eof_status()["insert_id"])
+                order["order_id"] = order_id
+                order["total"] = total
+                order["quantity"] = quantity
+        if order_id > -1 and not has_error:
+            result = DB.insertOne("""INSERT INTO IS601_S_OrderItems (quantity, unit_price, order_id, item_id, user_id)
+            SELECT quantity, unit_price, %s, item_id, user_id FROM IS601_S_Cart c WHERE c.user_id = %s""",
+            order_id, current_user.get_id())
+            if not result.status:
+                flash("Error recording order history", "danger")
+                has_error = True
+                DB.getDB().rollback()
+        if not has_error:
+            result = DB.update("""
+            UPDATE IS601_S_Items 
+                set stock = stock - (select IFNULL(quantity, 0) FROM IS601_S_Cart WHERE item_id = IS601_S_Items.id and user_id = %(uid)s),
+                visibility = (select if(stock - (select IFNULL(quantity, 0) FROM IS601_S_Cart WHERE item_id = IS601_S_Items.id and user_id = %(uid)s)>0, 1, 0) 
+                FROM IS601_S_Cart WHERE item_id = IS601_S_Items.id and user_id = %(uid)s) 
+                WHERE id in (SELECT item_id from IS601_S_Cart where user_id = %(uid)s)
+            """, {"uid":current_user.get_id()} )
+            if not result.status:
+                flash("Error updating stock", "danger")
+                has_error = True
+                DB.getDB().rollback()
+        if not has_error:
+            result = DB.delete("DELETE FROM IS601_S_Cart WHERE user_id = %s", current_user.get_id())
+    
+        if not has_error:
+            DB.getDB().commit()
+            flash("Purchase successful!", "success")
+        else:
+            return redirect(url_for("shop.cart"))
+        order_info = [{"First_name": request.form.get('fname'),
+                        "Last_name": request.form.get('lname'),
+                        "Address": request.form.get('address'),
+                        "Payment_Method": request.form.get('payment')
+                        }]
+    except Exception as e:
+        print("Transaction exception", e)
+        flash("Something went wrong", "danger")
+        flash("Any amount debited will be refunded in 2-4 business days", "warning")
+        tb.print_exc()
+        return redirect(url_for("shop.cart"))
+    return render_template("order_summary.html", rows=cart, order=order, order_info=order_info)
+# Gagan Indukala Krishna Murthy - gi36 - 27th April
+
 @shop.route("/payment", methods=["POST"])
 @login_required
 # Gagan Indukala Krishna Murthy - gi36 - 27th April
@@ -269,5 +375,4 @@ def order():
     print(rows)
     print(order_info)
     return render_template("order.html", rows=rows, total=total, order_info=order_info )
-
 # Gagan Indukala Krishna Murthy - gi36 - 20th April
