@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container-fluid">
     <div class="h1">List Roles</div>
-    <table class="table table-striped table-bordered">
+    <table class="table table-hover table-bordered">
         {% if rows and rows|length > 0 %}
-        <thead>
+        <thead class="table-dark">
             <tr class="text-capitalize">
                 {% for r in rows[0] %}
                 <th>{{r}}</th>
@@ -15,15 +15,23 @@
         </thead>
         {% for r in rows %}
         <tr>
-            {% for v in r.values() %}
+        {% for k,v in r.items() %}
+            {% if k == "is_active" %}
+                {% if v == 1 %}
+                <td>Active</td>
+                {% else %}
+                <td>Not Active</td>
+                {% endif %}
+            {% else %}
             <td>{{v}}</td>
-            {% endfor %}
+            {% endif %}
+        {% endfor %}
             <td><a href="{{url_for('roles.edit', id=r.get('id'))}}"
                     class="btn btn-secondary btn-sm">Edit</a>
                 {# **request.args spreads the key value pairs to be part of the url#}
                 {# the idea is to pass it to the next route #}
                 <a href="{{url_for('roles.delete', id=r.get('id'), **request.args)}}"
-                    class="btn btn-danger btn-sm">x</a>
+                    class="btn btn-danger btn-sm"> Delete </a>
             </td>
         </tr>
         {% endfor %}

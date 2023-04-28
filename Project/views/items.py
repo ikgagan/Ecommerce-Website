@@ -5,7 +5,15 @@ from flask_login import login_required, current_user
 import traceback as tb
 shop = Blueprint('shop', __name__, url_prefix='/',template_folder='templates')
 
-    # Gagan Indukala Krishna Murthy - gi36 - 20th April
+
+
+@shop.route("/newrelease")
+@login_required
+def new_release():
+    return render_template("new_release.html")
+
+
+# Gagan Indukala Krishna Murthy - gi36 - 20th April
 @shop.route("/shop", methods=["GET","POST"])
 @login_required
 def shop_list():
