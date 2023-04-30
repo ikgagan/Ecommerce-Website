@@ -71,7 +71,7 @@ def view_item():
         flash("Item not found", "danger")
     return render_template("view_item.html", rows=rows if rows else {})
 
-@admin.route("/admin/items/delete", methods=["GET"])
+@admin.route("/admin/items/delete", methods=["GET","POST"])
 @admin_permission.require(http_exception=403)
 def delete():
     # Gagan Indukala Krishna Murthy - gi36 - April 21th
