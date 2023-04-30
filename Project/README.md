@@ -26,3 +26,14 @@ Use the "pip install -r requirements.txt" command to install all of the Python m
  Command - ```Python init_db.py```
  > - Finally run the program.\
  Command - ```Python main.py```
+
+ ---------------------
+ #### **Stack Used for this Project**
+ >- **Flask** Python Web Development Framework
+ >- **Bootstrap** - Open source CSS framework
+ >- **HTML** standard markup language for webpages
+ >- **Jinja** Template - Web Template engine for Python
+ >- **WTForms** Forms validator for Python web development
+ >- **MYSQL** Open source Relational Database Management System
+ >- **GIT** for Version Controling 
+ >- **Heroku** as the Cloud Platform
