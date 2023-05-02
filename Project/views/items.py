@@ -5,23 +5,22 @@ from flask_login import login_required, current_user
 import traceback as tb
 shop = Blueprint('shop', __name__, url_prefix='/',template_folder='templates')
 
-
+def get_item_count():
+    query = "SELECT IFNULL(SUM(quantity),0) as total FROM IS601_S_Cart WHERE user_id = %s"
+    result = DB.selectOne(query, current_user.get_id())
+    if result.status and result.row:
+        return int(result.row["total"])
+    return 0    
 
 @shop.route("/newrelease")
 @login_required
 def new_release():
     return render_template("new_release.html")
 
-def total_cart():
-    id = request.form.get("id")
-    print(f"check for user id what is printing {id} and {request.form.get('id')}")
-    result = DB.selectAll("SELECT quantity FROM IS601_S_Cart WHERE user_id = %s", id)
-
 # Gagan Indukala Krishna Murthy - gi36 - 20th April
 @shop.route("/shop", methods=["GET","POST"])
 @login_required
 def shop_list():
-    total_cart()
     # Gagan Indukala Krishna Murthy - gi36 - 20th April
     query = """SELECT id, name, description, stock, unit_price, image
                FROM IS601_S_Items WHERE visibility = 1"""
