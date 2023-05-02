@@ -6,6 +6,7 @@ import traceback as tb
 shop = Blueprint('shop', __name__, url_prefix='/',template_folder='templates')
 
 def get_item_count():
+    print(f"check for authentication {current_user.is_authenticated()}")
     query = "SELECT IFNULL(SUM(quantity),0) as total FROM IS601_S_Cart WHERE user_id = %s"
     result = DB.selectOne(query, current_user.get_id())
     if result.status and result.row:
