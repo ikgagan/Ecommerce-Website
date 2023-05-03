@@ -14,12 +14,12 @@
 
 -------------------
 #### **Demo Video Link**
-#### Youtube: https://www.youtube.com/watch?v=gnDYC3A6RLg
+#### Youtube: https://www.youtube.com/watch?v=zq-periwGvI
 
 -------------------
 #### **Steps to run the Flask program locally**
 >- Install the ```requirements.txt``` file\
-Use the ```pip freeze``` command to generate a list of Python modules and #### packages installed in the virtual environment of your project. This ensures the list is up to date and accurate\
+Use the ```pip freeze``` command to generate a list of Python modules and packages installed in the virtual environment of your project. This ensures the list is up to date and accurate\
 Use the ```pip install -r requirements.txt``` command to install all of the Python modules and packages listed in your requirements.txt file. This saves time and effort.
 >- Create an ```dotenv``` /```.env``` file containing your DB_URL
 >- Run the ```init_db.py``` file in ```sql``` folder for the database tables to get created.\
@@ -29,11 +29,11 @@ Use the ```pip install -r requirements.txt``` command to install all of the Pyth
 
  ---------------------
  #### **Stack Used for this Project**
- >- **Flask** Python Web Development Framework
+ >- **Flask** - Python Web Development Framework
  >- **Bootstrap** - Open source CSS framework
  >- **HTML** standard markup language for webpages
  >- **Jinja** Template - Web Template engine for Python
- >- **WTForms** Forms validator for Python web development
- >- **MYSQL** Open source Relational Database Management System
+ >- **WTForms** - Forms validator for Python web development
+ >- **MYSQL** - Open source Relational Database Management System
  >- **GIT** for Version Controling 
  >- **Heroku** as the Cloud Platform

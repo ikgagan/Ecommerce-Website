@@ -11,15 +11,15 @@ class User(UserMixin, JsonSerializable):
             from roles.models import Role
             roles = [Role(**r) for r in roles]
         self.roles = roles
-        self.authenticated = False
-    def is_active(self):
+        # self.authenticated = False
+    """def is_active(self):
         return self.is_active()
     def is_anonymous(self):
         return False
     def is_authenticated(self):
         return self.authenticated
     def is_active(self):
-        return True
+        return True"""
     def get_id(self):
         return str(self.id)
     # usable in templates and views to check if user has a role

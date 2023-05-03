@@ -43,7 +43,10 @@ def create_app(config_filename=''):
         app.register_blueprint(admin)
         from views.items import shop
         app.register_blueprint(shop)
-        
+        from views.items import get_item_count
+
+        app.jinja_env.globals.update(cart_total= get_item_count)
+
         # load the extension
         principals = Principal(app) # must be defined/initialized for identity to work (flask_principal)
         @login_manager.user_loader
