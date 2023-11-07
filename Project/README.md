@@ -1,11 +1,8 @@
-# **IS601 E-Commerce Webiste for Final Project**
+# **E-Commerce Webiste**
 ## **Web System Development** 
 ## **Flask FrameWork**
 ----------------------
 #### **Developer**: Gagan Indukala Krishna Murthy
-#### **UCID** : gi36 
-#### **Course year**: Spring 2023
-
 -------------------
 #### **Website Links**
 #### Dev : https://is601-gi36-dev.herokuapp.com/login
